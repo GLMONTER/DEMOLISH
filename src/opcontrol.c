@@ -14,6 +14,7 @@ void operatorControl();
 
 void LoadBall()
 {
+
 	//handling the main loader
 		if(joystickGetDigital(MAIN_JOY, 7, JOY_UP))
 		{
@@ -160,7 +161,7 @@ void operatorControl()
 							motorSet(LeftMot, 127 - -joystickGetAnalog(MAIN_JOY, 4));
 							motorSet(LeftMotT, 127 - -joystickGetAnalog(MAIN_JOY, 4));
 							motorSet(Mid, 127 - -joystickGetAnalog(MAIN_JOY, 4));
-					} 
+					}
 
 					if(joystickGetAnalog(MAIN_JOY, 4) < -30)
 					{
