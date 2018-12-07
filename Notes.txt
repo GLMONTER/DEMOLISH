@@ -1,0 +1,2 @@
+sudo chmod 666 /dev/ttyACM0 : Call this command on whatever port the computer can't read and write to, in short..
+this command gives read and write permissions to the computer
