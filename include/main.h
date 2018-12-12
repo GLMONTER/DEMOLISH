@@ -25,8 +25,9 @@
 // This prevents multiple inclusion, which isn't bad for this file but is good practice
 #define MAIN_H_
 
-#define LoadMot 5
 
+//motor defines for function calls
+#define LoadMot 5
 #define LoadServ 6
 
 #define LeftMot 1
@@ -40,12 +41,26 @@
 #define PMotor 7
 #define PMotor2 4
 
+
+//joystick defines for function calls, MAIN_JOY is main joystick and PART_JOY is partner joystick
 #define MAIN_JOY 1
 #define PART_JOY 2
 
 
+//sensor defines
+#define R_ENC_TOP 1
+#define R_ENC_BOT 2
+
+#define L_ENC_TOP 3
+#define L_ENC_BOT 4
+
+
+
 #include <API.h>
 
+
+Encoder rightEncoder;
+Encoder leftEncoder;
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus
 extern "C" {

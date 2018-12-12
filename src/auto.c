@@ -23,6 +23,79 @@
  * The autonomous task may exit, unlike operatorControl() which should never exit. If it does
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
+
+
+//this function is the autonmyous period for the red square closest to the flags
+void CloseRed()
+{
+      //so we can exit the loop when we are done with the period
+      bool isDone = false;
+
+      while(!isDone)
+      {
+
+      //go forward from initial square
+      while(encoderGet(rightEncoder) < 200 && encoderGet(leftEncoder) < 200)
+      {
+        motorSet(RightMot, 127);
+        motorSet(RightMotT, 127);
+        motorSet(Mid2, 127);
+
+        motorSet(LeftMot, 127);
+        motorSet(LeftMotT, 127);
+        motorSet(Mid, 127);
+      }
+
+      motorStopAll();
+      encoderReset(rightEncoder);
+      encoderReset(leftEncoder);
+
+      //turn left to aim at the blue flag
+      while(encoderGet(rightEncoder) < 340)
+      {
+        motorSet(RightMot, 127);
+        motorSet(RightMotT, 127);
+        motorSet(Mid2, 127);
+
+        motorSet(LeftMot, -127);
+        motorSet(LeftMotT, -127);
+        motorSet(Mid, -127);
+      }
+
+      motorStopAll();
+      encoderReset(rightEncoder);
+      encoderReset(leftEncoder);
+
+      //go forward after turning to shoot the flag correctly
+      while(encoderGet(rightEncoder) < 360 && encoderGet(leftEncoder) < 360)
+      {
+        motorSet(RightMot, 127);
+        motorSet(RightMotT, 127);
+        motorSet(Mid2, 127);
+
+        motorSet(LeftMot, 127);
+        motorSet(LeftMotT, 127);
+        motorSet(Mid, 127);
+      }
+
+      motorStopAll();
+      encoderReset(rightEncoder);
+      encoderReset(leftEncoder);
+      //change this to true so we can exit the loop
+      isDone = true;
+    }
+
+    motorSet(PMotor, -127);
+    motorSet(PMotor2, -127);
+
+    wait(1500);
+    //shutdown the encoders, power will be lost and any function calls related to the encoder in the function parameters will be ignored.
+    encoderShutdown(rightEncoder);
+    encoderShutdown(leftEncoder);
+}
+
+
 void autonomous()
 {
+  CloseRed();
 }
