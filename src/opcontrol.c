@@ -177,8 +177,8 @@ void operatorControl()
 			}
 			//this Block of Code handles basic forward and backward functionality, and also stopping the car if there is no input
 		{
-					//if we are not turning and we are hitting the forward button, then simply go forward
-					if(joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) < 30 || joystickGetAnalog(MAIN_JOY, 4) > -30))
+					//if we are not turning and we are hitting the backward button, then simply go backward
+					if(joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) < 30 && joystickGetAnalog(MAIN_JOY, 4) > -30))
 					{
 							motorSet(Mid, -127);
 							motorSet(Mid2, -127);
@@ -197,8 +197,8 @@ void operatorControl()
 							motorStop(Mid);
 							motorStop(Mid2);
 					}
-
-					if(joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && joystickGetAnalog(MAIN_JOY, 4) < 30 && joystickGetAnalog(MAIN_JOY, 4) > -30)
+					//if we are not turning and we are hitting the forward button, then simply go forward
+					if(joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) < 30 && joystickGetAnalog(MAIN_JOY, 4) > -30))
 					{
 							motorSet(Mid, 127);
 							motorSet(Mid2, 127);
