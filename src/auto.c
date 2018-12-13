@@ -35,7 +35,7 @@ void CloseRed()
       {
 
       //go forward from initial square
-      while(encoderGet(rightEncoder) < 200 && encoderGet(leftEncoder) < 200)
+      while(encoderGet(rightEncoder) < 180 && encoderGet(leftEncoder) < 180)
       {
         motorSet(RightMot, 127);
         motorSet(RightMotT, 127);
@@ -82,13 +82,61 @@ void CloseRed()
       encoderReset(rightEncoder);
       encoderReset(leftEncoder);
       //change this to true so we can exit the loop
-      isDone = true;
-    }
 
+    }
+    //shoot the ball at the second flag
     motorSet(PMotor, -127);
     motorSet(PMotor2, -127);
 
     wait(1500);
+
+    //turn after shoooting
+    while(encoderGet(rightEncoder) < 340)
+    {
+      motorSet(RightMot, 127);
+      motorSet(RightMotT, 127);
+      motorSet(Mid2, 127);
+
+      motorSet(LeftMot, -127);
+      motorSet(LeftMotT, -127);
+      motorSet(Mid, -127);
+    }
+
+    motorStopAll();
+    encoderReset(rightEncoder);
+    encoderReset(leftEncoder);
+
+
+    //go forward after turning, getting ready to melee
+    while(encoderGet(rightEncoder) < 200 && encoderGet(leftEncoder) < 200)
+    {
+      motorSet(RightMot, 127);
+      motorSet(RightMotT, 127);
+      motorSet(Mid2, 127);
+
+      motorSet(LeftMot, 127);
+      motorSet(LeftMotT, 127);
+      motorSet(Mid, 127);
+    }
+    //turn right, getting ready to go forward to melee
+    while(encoderGet(leftEncoder) < 340)
+    {
+      motorSet(RightMot, -127);
+      motorSet(RightMotT, -127);
+      motorSet(Mid2, -127);
+
+      motorSet(LeftMot, 127);
+      motorSet(LeftMotT, 127);
+      motorSet(Mid, 127);
+    }
+
+    motorStopAll();
+    encoderReset(rightEncoder);
+    encoderReset(leftEncoder);
+
+
+    isDone = true;
+
     //shutdown the encoders, power will be lost and any function calls related to the encoder in the function parameters will be ignored.
     encoderShutdown(rightEncoder);
     encoderShutdown(leftEncoder);
