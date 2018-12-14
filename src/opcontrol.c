@@ -12,46 +12,56 @@
 
 void operatorControl();
 
+//toggle and press bool for forward motion of drum
 int buttonToggleF = 0;
 int buttonPressedF = 0;
 
+//toggle and press bool for backward motion of drum
 int buttonToggleR = 0;
 int buttonPressedR = 0;
 
+//for toggling the drum and soon other toggles
 void pollToggles()
 {
+		//go forward with drum
 		if(joystickGetDigital(MAIN_JOY, 7, JOY_RIGHT))
 		{
+				//if the forward button toggle isn't on then continute
 				if(!buttonPressedF)
 				{
+						//actaully flip the toggle, this is why the type has to be int
 						buttonToggleF = 1 - buttonToggleF;
-
+						//changed button pressed to true
 						buttonPressedF = 1;
-
+						//change the backward toggle to false so we don't try to go backwards and forwards
 						buttonToggleR = false;
 				}
 		}
+		//switch back to normal buttton state but leave toggle on if button isn't pressed.
 		else
 			buttonPressedF = 0;
 
-
+//if our forward toggle is on, then eat the balls :D
 if(buttonToggleF == true)
 {
 		motorSet(LoadServ, 127);
 }
+//check if other toggle is on if we need to really stop the motor
 else
 {
-		if(!buttonPressedR)
+		if(!buttonToggleR)
 		{
 				motorStop(LoadServ);
 		}
 }
 
-	//go backward
+	//go backwards with drum
 	if(joystickGetDigital(MAIN_JOY, 7, JOY_LEFT))
 	{
+			//if we haven't pressed the button then toggle the button
 			if(!buttonPressedR)
 			{
+					//actually toggle the button, this is why the type is int
 					buttonToggleR = 1 - buttonToggleR;
 
 					buttonPressedR = 1;
@@ -61,14 +71,16 @@ else
 
 			}
 	}
+	//else, then turn button pressed to false
 	else
 		buttonPressedR = 0;
 
-
+	//if backward button toggle is on, then start the motor backward
 	if(buttonToggleR == true)
 	{
 	motorSet(LoadServ, -127);
 	}
+	//else, check if the forward toggle is off, then stop.
 	else
 	{
 			if(!buttonToggleF)
@@ -80,64 +92,66 @@ else
 
 void LoadBall()
 {
-
 		//handling the main loader
 		if(joystickGetDigital(MAIN_JOY, 7, JOY_UP))
 		{
 				motorSet(LoadMot, 127);
 		}
-		if(!joystickGetDigital(MAIN_JOY, 7, JOY_UP) && !joystickGetDigital(MAIN_JOY, 7, JOY_DOWN))
-		{
-			motorStop(LoadMot);
-		}
 		if(joystickGetDigital(MAIN_JOY, 7, JOY_DOWN))
 		{
 				motorSet(LoadMot, -127);
+		}
+		if(!joystickGetDigital(MAIN_JOY, 7, JOY_UP) && !joystickGetDigital(MAIN_JOY, 7, JOY_DOWN))
+		{
+			motorStop(LoadMot);
 		}
 }
 
 
 void MovePuncher()
 {
-	if(joystickGetDigital(MAIN_JOY, 8, JOY_RIGHT))
-	{
-			motorSet(PMotor, 127);
-			motorSet(PMotor2, 127);
-	}
+		if(joystickGetDigital(MAIN_JOY, 8, JOY_RIGHT))
+		{
+				motorSet(PMotor, 127);
+				motorSet(PMotor2, 127);
+		}
 
-	if(joystickGetDigital(MAIN_JOY, 8, JOY_LEFT))
-	{
-		motorSet(PMotor, -127);
-		motorSet(PMotor2, -127);
-	}
+		if(joystickGetDigital(MAIN_JOY, 8, JOY_LEFT))
+		{
+				motorSet(PMotor, -127);
+				motorSet(PMotor2, -127);
+		}
 
-	if(!joystickGetDigital(MAIN_JOY, 8, JOY_LEFT) && !joystickGetDigital(MAIN_JOY, 8, JOY_RIGHT))
-	{
-			motorStop(PMotor);
-			motorStop(PMotor2);
-	}
+		if(!joystickGetDigital(MAIN_JOY, 8, JOY_LEFT) && !joystickGetDigital(MAIN_JOY, 8, JOY_RIGHT))
+		{
+				motorStop(PMotor);
+				motorStop(PMotor2);
+		}
 }
 
 
 void AltControl()
 {
-	while(true)
-	{
-		//if we get the up button on button group 8, go back to normal controls and break out of the loop.
-	if(joystickGetDigital(MAIN_JOY, 8, JOY_UP))
-	{
-		operatorControl();
-	}
-	motorSet(Mid2, joystickGetAnalog(MAIN_JOY, 2));
-	motorSet(Mid, joystickGetAnalog(MAIN_JOY, 3));
-	motorSet(LeftMot, joystickGetAnalog(MAIN_JOY, 3));
-	motorSet(LeftMotT, joystickGetAnalog(MAIN_JOY, 3));
-	motorSet(RightMot, joystickGetAnalog(MAIN_JOY, 2));
-	motorSet(RightMotT, joystickGetAnalog(MAIN_JOY, 2));
-	MovePuncher();
-	LoadBall();
-	pollToggles();
-}
+		while(true)
+		{
+				//if we get the up button on button group 8, go back to normal controls and break out of the loop.
+				if(joystickGetDigital(MAIN_JOY, 8, JOY_UP))
+				{
+						operatorControl();
+				}
+
+				motorSet(Mid, joystickGetAnalog(MAIN_JOY, 3));
+				motorSet(LeftMot, joystickGetAnalog(MAIN_JOY, 3));
+				motorSet(LeftMotT, joystickGetAnalog(MAIN_JOY, 3));
+
+				motorSet(RightMot, joystickGetAnalog(MAIN_JOY, 2));
+				motorSet(Mid2, joystickGetAnalog(MAIN_JOY, 2));
+				motorSet(RightMotT, joystickGetAnalog(MAIN_JOY, 2));
+
+				MovePuncher();
+				LoadBall();
+				pollToggles();
+		}
 }
 
 void operatorControl()

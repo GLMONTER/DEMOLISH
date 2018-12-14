@@ -37,13 +37,13 @@ void CloseRed()
       //go forward from initial square
       while(encoderGet(rightEncoder) < 180 && encoderGet(leftEncoder) < 180)
       {
-        motorSet(RightMot, 127);
-        motorSet(RightMotT, 127);
-        motorSet(Mid2, 127);
+          motorSet(RightMot, 127);
+          motorSet(RightMotT, 127);
+          motorSet(Mid2, 127);
 
-        motorSet(LeftMot, 127);
-        motorSet(LeftMotT, 127);
-        motorSet(Mid, 127);
+          motorSet(LeftMot, 127);
+          motorSet(LeftMotT, 127);
+          motorSet(Mid, 127);
       }
 
       motorStopAll();
@@ -53,13 +53,13 @@ void CloseRed()
       //turn left to aim at the blue flag
       while(encoderGet(rightEncoder) < 380)
       {
-        motorSet(RightMot, 127);
-        motorSet(RightMotT, 127);
-        motorSet(Mid2, 127);
+          motorSet(RightMot, 127);
+          motorSet(RightMotT, 127);
+          motorSet(Mid2, 127);
 
-        motorSet(LeftMot, -127);
-        motorSet(LeftMotT, -127);
-        motorSet(Mid, -127);
+          motorSet(LeftMot, -127);
+          motorSet(LeftMotT, -127);
+          motorSet(Mid, -127);
       }
 
       motorStopAll();
@@ -69,13 +69,13 @@ void CloseRed()
       //go forward after turning to shoot the flag correctly
       while(encoderGet(rightEncoder) < 360 && encoderGet(leftEncoder) < 360)
       {
-        motorSet(RightMot, 127);
-        motorSet(RightMotT, 127);
-        motorSet(Mid2, 127);
+          motorSet(RightMot, 127);
+          motorSet(RightMotT, 127);
+          motorSet(Mid2, 127);
 
-        motorSet(LeftMot, 127);
-        motorSet(LeftMotT, 127);
-        motorSet(Mid, 127);
+          motorSet(LeftMot, 127);
+          motorSet(LeftMotT, 127);
+          motorSet(Mid, 127);
       }
 
       motorStopAll();
@@ -92,13 +92,13 @@ void CloseRed()
       //turn after shoooting
       while(encoderGet(rightEncoder) < 360)
       {
-        motorSet(RightMot, 127);
-        motorSet(RightMotT, 127);
-        motorSet(Mid2, 127);
+          motorSet(RightMot, 127);
+          motorSet(RightMotT, 127);
+          motorSet(Mid2, 127);
 
-        motorSet(LeftMot, -127);
-        motorSet(LeftMotT, -127);
-        motorSet(Mid, -127);
+          motorSet(LeftMot, -127);
+          motorSet(LeftMotT, -127);
+          motorSet(Mid, -127);
       }
 
       motorStopAll();
@@ -109,24 +109,24 @@ void CloseRed()
       //go forward after turning, getting ready to melee
       while(encoderGet(rightEncoder) < 300 && encoderGet(leftEncoder) < 300)
       {
-        motorSet(RightMot, 127);
-        motorSet(RightMotT, 127);
-        motorSet(Mid2, 127);
+          motorSet(RightMot, 127);
+          motorSet(RightMotT, 127);
+          motorSet(Mid2, 127);
 
-        motorSet(LeftMot, 127);
-        motorSet(LeftMotT, 127);
-        motorSet(Mid, 127);
+          motorSet(LeftMot, 127);
+          motorSet(LeftMotT, 127);
+          motorSet(Mid, 127);
       }
       //turn right, getting ready to go forward to melee
       while(encoderGet(leftEncoder) < 720)
       {
-        motorSet(RightMot, -127);
-        motorSet(RightMotT, -127);
-        motorSet(Mid2, -127);
+          motorSet(RightMot, -127);
+          motorSet(RightMotT, -127);
+          motorSet(Mid2, -127);
 
-        motorSet(LeftMot, 127);
-        motorSet(LeftMotT, 127);
-        motorSet(Mid, 127);
+          motorSet(LeftMot, 127);
+          motorSet(LeftMotT, 127);
+          motorSet(Mid, 127);
       }
 
       motorStopAll();
@@ -147,5 +147,5 @@ void CloseRed()
 
 void autonomous()
 {
-  CloseRed();
+    CloseRed();
 }
