@@ -12,10 +12,76 @@
 
 void operatorControl();
 
+int buttonToggleF = 0;
+int buttonPressedF = 0;
+
+int buttonToggleR = 0;
+int buttonPressedR = 0;
+
+void pollToggles()
+{
+		if(joystickGetDigital(MAIN_JOY, 7, JOY_RIGHT))
+		{
+				if(!buttonPressedF)
+				{
+						buttonToggleF = 1 - buttonToggleF;
+
+						buttonPressedF = 1;
+
+						buttonToggleR = false;
+				}
+		}
+		else
+			buttonPressedF = 0;
+
+
+if(buttonToggleF == true)
+{
+		motorSet(LoadServ, 127);
+}
+else
+{
+		if(!buttonPressedR)
+		{
+				motorStop(LoadServ);
+		}
+}
+
+	//go backward
+	if(joystickGetDigital(MAIN_JOY, 7, JOY_LEFT))
+	{
+			if(!buttonPressedR)
+			{
+					buttonToggleR = 1 - buttonToggleR;
+
+					buttonPressedR = 1;
+
+					//so we stop going forward.
+					buttonToggleF = false;
+
+			}
+	}
+	else
+		buttonPressedR = 0;
+
+
+	if(buttonToggleR == true)
+	{
+	motorSet(LoadServ, -127);
+	}
+	else
+	{
+			if(!buttonToggleF)
+			{
+					motorStop(LoadServ);
+			}
+	}
+}
+
 void LoadBall()
 {
 
-	//handling the main loader
+		//handling the main loader
 		if(joystickGetDigital(MAIN_JOY, 7, JOY_UP))
 		{
 				motorSet(LoadMot, 127);
@@ -27,19 +93,6 @@ void LoadBall()
 		if(joystickGetDigital(MAIN_JOY, 7, JOY_DOWN))
 		{
 				motorSet(LoadMot, -127);
-		}
-		//handling the servo
-		if(joystickGetDigital(MAIN_JOY, 7, JOY_RIGHT))
-		{
-				motorSet(LoadServ, 100);
-		}
-		if(!joystickGetDigital(MAIN_JOY, 7, JOY_RIGHT) && !joystickGetDigital(MAIN_JOY, 7, JOY_LEFT))
-		{
-				motorStop(LoadServ);
-		}
-		if(joystickGetDigital(MAIN_JOY, 7, JOY_LEFT))
-		{
-				motorSet(LoadServ, -100);
 		}
 }
 
@@ -83,6 +136,7 @@ void AltControl()
 	motorSet(RightMotT, joystickGetAnalog(MAIN_JOY, 2));
 	MovePuncher();
 	LoadBall();
+	pollToggles();
 }
 }
 
@@ -95,7 +149,7 @@ void operatorControl()
 		{
 			AltControl();
 		}
-
+			pollToggles();
 			MovePuncher();
 			LoadBall();
 			//MAIN_JOY = 1 which is the main controller, 6 is the button group, and JOY_DOWN is the down button in button group 6
