@@ -25,7 +25,6 @@
 // This prevents multiple inclusion, which isn't bad for this file but is good practice
 #define MAIN_H_
 
-
 //motor defines for function calls
 #define LoadMot 5
 #define LoadServ 6
@@ -53,6 +52,7 @@
 
 #define L_ENC_TOP 3
 #define L_ENC_BOT 4
+
 
 
 

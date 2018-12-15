@@ -10,7 +10,11 @@
 #include "main.h"
 
 
+
+
+
 void operatorControl();
+
 
 //toggle and press bool for forward motion of drum
 int buttonToggleF = 0;
@@ -156,6 +160,8 @@ void AltControl()
 
 void operatorControl()
 {
+
+
 	while (true)
 	{
 		//if we get the Down button on button group 8, go to the alt controls and break out of the loop.

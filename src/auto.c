@@ -25,110 +25,119 @@
  */
 
 
-//this function is the autonmyous period for the red square closest to the flags
-void CloseRed()
+void shoot()
+{
+	motorSet(PMotor, -127);
+	motorSet(PMotor2, -127);
+
+	delay(2000);
+}
+void goForward(int rotDeg)
+{
+	motorStopAll();
+	encoderReset(rightEncoder);
+	encoderReset(leftEncoder);
+
+	if(rotDeg < 0)
+	{
+		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) > rotDeg)
+		{
+				motorSet(RightMot, -127);
+				motorSet(RightMotT, -127);
+				motorSet(Mid2, -127);
+
+				motorSet(LeftMot, -127);
+				motorSet(LeftMotT, -127);
+				motorSet(Mid, -127);
+		}
+	}
+	else
+	{
+		while(encoderGet(rightEncoder) < rotDeg && encoderGet(leftEncoder) < rotDeg)
+		{
+				motorSet(RightMot, 127);
+				motorSet(RightMotT, 127);
+				motorSet(Mid2, 127);
+
+				motorSet(LeftMot, 127);
+				motorSet(LeftMotT, 127);
+				motorSet(Mid, 127);
+		}
+	}
+
+	motorStopAll();
+	encoderReset(rightEncoder);
+	encoderReset(leftEncoder);
+}
+
+void turnRight(int deg)
+{
+	if(deg == 0)
+			deg = 280;
+
+	motorStopAll();
+	encoderReset(rightEncoder);
+	encoderReset(leftEncoder);
+
+	//turn left to aim at the blue flag
+	while(encoderGet(leftEncoder) < deg)
+	{
+			motorSet(RightMot, -127);
+			motorSet(RightMotT, -127);
+			motorSet(Mid2, -127);
+
+			motorSet(LeftMot, 127);
+			motorSet(LeftMotT, 127);
+			motorSet(Mid, 127);
+	}
+
+	motorStopAll();
+	encoderReset(rightEncoder);
+	encoderReset(leftEncoder);
+}
+void turnLeft(int deg)
+{
+	if(deg == 0)
+			deg = 280;
+	motorStopAll();
+	encoderReset(rightEncoder);
+	encoderReset(leftEncoder);
+
+	//turn left to aim at the blue flag
+	while(encoderGet(rightEncoder) < deg)
+	{
+			motorSet(RightMot, 127);
+			motorSet(RightMotT, 127);
+			motorSet(Mid2, 127);
+
+			motorSet(LeftMot, -127);
+			motorSet(LeftMotT, -127);
+			motorSet(Mid, -127);
+	}
+
+	motorStopAll();
+	encoderReset(rightEncoder);
+	encoderReset(leftEncoder);
+}
+void closeRed()
 {
       //so we can exit the loop when we are done with the period
       bool isDone = false;
 
       while(!isDone)
       {
+      shoot();
 
+      turnLeft(17);
       //go forward from initial square
-      while(encoderGet(rightEncoder) < 180 && encoderGet(leftEncoder) < 180)
-      {
-          motorSet(RightMot, 127);
-          motorSet(RightMotT, 127);
-          motorSet(Mid2, 127);
+      goForward(1400);
 
-          motorSet(LeftMot, 127);
-          motorSet(LeftMotT, 127);
-          motorSet(Mid, 127);
-      }
-
-      motorStopAll();
-      encoderReset(rightEncoder);
-      encoderReset(leftEncoder);
-
-      //turn left to aim at the blue flag
-      while(encoderGet(rightEncoder) < 380)
-      {
-          motorSet(RightMot, 127);
-          motorSet(RightMotT, 127);
-          motorSet(Mid2, 127);
-
-          motorSet(LeftMot, -127);
-          motorSet(LeftMotT, -127);
-          motorSet(Mid, -127);
-      }
-
-      motorStopAll();
-      encoderReset(rightEncoder);
-      encoderReset(leftEncoder);
-
-      //go forward after turning to shoot the flag correctly
-      while(encoderGet(rightEncoder) < 360 && encoderGet(leftEncoder) < 360)
-      {
-          motorSet(RightMot, 127);
-          motorSet(RightMotT, 127);
-          motorSet(Mid2, 127);
-
-          motorSet(LeftMot, 127);
-          motorSet(LeftMotT, 127);
-          motorSet(Mid, 127);
-      }
-
-      motorStopAll();
-      encoderReset(rightEncoder);
-      encoderReset(leftEncoder);
-      //change this to true so we can exit the loop
-
-      //shoot the ball at the second flag
-      motorSet(PMotor, -127);
-      motorSet(PMotor2, -127);
-
-      wait(1500);
-
-      //turn after shoooting
-      while(encoderGet(rightEncoder) < 360)
-      {
-          motorSet(RightMot, 127);
-          motorSet(RightMotT, 127);
-          motorSet(Mid2, 127);
-
-          motorSet(LeftMot, -127);
-          motorSet(LeftMotT, -127);
-          motorSet(Mid, -127);
-      }
-
-      motorStopAll();
-      encoderReset(rightEncoder);
-      encoderReset(leftEncoder);
+      goForward(-1600);
 
 
-      //go forward after turning, getting ready to melee
-      while(encoderGet(rightEncoder) < 300 && encoderGet(leftEncoder) < 300)
-      {
-          motorSet(RightMot, 127);
-          motorSet(RightMotT, 127);
-          motorSet(Mid2, 127);
+			turnRight(0);
 
-          motorSet(LeftMot, 127);
-          motorSet(LeftMotT, 127);
-          motorSet(Mid, 127);
-      }
-      //turn right, getting ready to go forward to melee
-      while(encoderGet(leftEncoder) < 720)
-      {
-          motorSet(RightMot, -127);
-          motorSet(RightMotT, -127);
-          motorSet(Mid2, -127);
-
-          motorSet(LeftMot, 127);
-          motorSet(LeftMotT, 127);
-          motorSet(Mid, 127);
-      }
-
+			goForward(2000);
       motorStopAll();
       encoderReset(rightEncoder);
       encoderReset(leftEncoder);
@@ -143,9 +152,7 @@ void CloseRed()
     }
 
 }
-
-
 void autonomous()
 {
-    CloseRed();
+  closeRed();
 }
