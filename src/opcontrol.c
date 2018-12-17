@@ -1,153 +1,8 @@
-/** @file opcontrol.c
- * @brief File for operator control code
- *
- * This file should contain the user operatorControl() function and any functions related to it.
- *
- * PROS contains FreeRTOS (http://www.freertos.org) whose source code may be
- * obtained from http://sourceforge.net/projects/freertos/files/ or on request.
- */
-
+//include main.h that includes api.h and all of the motor and sensor defines
 #include "main.h"
 
-
-
-
-
-void shoot()
-{
-	motorSet(PMotor, -127);
-	motorSet(PMotor2, -127);
-
-	delay(2000);
-}
-void goForward(int rotDeg)
-{
-	motorStopAll();
-	encoderReset(rightEncoder);
-	encoderReset(leftEncoder);
-
-	if(rotDeg < 0)
-	{
-		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) > rotDeg)
-		{
-				motorSet(RightMot, -127);
-				motorSet(RightMotT, -127);
-				motorSet(Mid2, -127);
-
-				motorSet(LeftMot, -127);
-				motorSet(LeftMotT, -127);
-				motorSet(Mid, -127);
-		}
-	}
-	else
-	{
-		while(encoderGet(rightEncoder) < rotDeg && encoderGet(leftEncoder) < rotDeg)
-		{
-				motorSet(RightMot, 127);
-				motorSet(RightMotT, 127);
-				motorSet(Mid2, 127);
-
-				motorSet(LeftMot, 127);
-				motorSet(LeftMotT, 127);
-				motorSet(Mid, 127);
-		}
-	}
-
-	motorStopAll();
-	encoderReset(rightEncoder);
-	encoderReset(leftEncoder);
-}
-
-void turnRight(int deg)
-{
-	if(deg == 0)
-			deg = 280;
-
-	motorStopAll();
-	encoderReset(rightEncoder);
-	encoderReset(leftEncoder);
-
-	//turn left to aim at the blue flag
-	while(encoderGet(leftEncoder) < deg)
-	{
-			motorSet(RightMot, -127);
-			motorSet(RightMotT, -127);
-			motorSet(Mid2, -127);
-
-			motorSet(LeftMot, 127);
-			motorSet(LeftMotT, 127);
-			motorSet(Mid, 127);
-	}
-
-	motorStopAll();
-	encoderReset(rightEncoder);
-	encoderReset(leftEncoder);
-}
-void turnLeft(int deg)
-{
-	if(deg == 0)
-			deg = 280;
-	motorStopAll();
-	encoderReset(rightEncoder);
-	encoderReset(leftEncoder);
-
-	//turn left to aim at the blue flag
-	while(encoderGet(rightEncoder) < deg)
-	{
-			motorSet(RightMot, 127);
-			motorSet(RightMotT, 127);
-			motorSet(Mid2, 127);
-
-			motorSet(LeftMot, -127);
-			motorSet(LeftMotT, -127);
-			motorSet(Mid, -127);
-	}
-
-	motorStopAll();
-	encoderReset(rightEncoder);
-	encoderReset(leftEncoder);
-}
-void closeRed()
-{
-      //so we can exit the loop when we are done with the period
-      bool isDone = false;
-
-      while(!isDone)
-      {
-      shoot();
-
-      turnLeft(17);
-      //go forward from initial square
-      goForward(1400);
-
-      goForward(-1600);
-
-
-			turnRight(0);
-
-			goForward(2000);
-      motorStopAll();
-      encoderReset(rightEncoder);
-      encoderReset(leftEncoder);
-
-
-      isDone = true;
-
-      //shutdown the encoders, power will be lost and any function calls related to the encoder in the function parameters will be ignored.
-      encoderShutdown(rightEncoder);
-      encoderShutdown(leftEncoder);
-
-    }
-
-}
-
-
-
-
+//define the operator control function for use in switching to alt control with the toggle button
 void operatorControl();
-
-
-
 
 //toggle and press bool for forward motion of drum
 int buttonToggleF = 0;
@@ -226,7 +81,7 @@ else
 			}
 	}
 }
-
+//the funciton that loads the ball using a hold button
 void LoadBall()
 {
 		//handling the main loader
@@ -244,7 +99,7 @@ void LoadBall()
 		}
 }
 
-
+//move the shooter forward using the right button in button group 8, move it backward using the left button in group 8
 void MovePuncher()
 {
 		if(joystickGetDigital(MAIN_JOY, 8, JOY_RIGHT))
@@ -266,7 +121,7 @@ void MovePuncher()
 		}
 }
 
-
+//the default control for the claw bot
 void AltControl()
 {
 		while(true)
@@ -285,6 +140,7 @@ void AltControl()
 				motorSet(Mid2, joystickGetAnalog(MAIN_JOY, 2));
 				motorSet(RightMotT, joystickGetAnalog(MAIN_JOY, 2));
 
+				//poll the shooter, loader, and drum toggle functions
 				MovePuncher();
 				LoadBall();
 				pollToggles();
@@ -293,8 +149,6 @@ void AltControl()
 
 void operatorControl()
 {
-
-
 	while (true)
 	{
 		//if we get the Down button on button group 8, go to the alt controls and break out of the loop.
@@ -383,37 +237,37 @@ void operatorControl()
 
 			}
 			//this Block of Code handles basic forward and backward functionality, and also stopping the car if there is no input
-		{
-					//if we are not turning and we are hitting the backward button, then simply go backward
-					if(joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) < 30 && joystickGetAnalog(MAIN_JOY, 4) > -30))
-					{
-							motorSet(Mid, -127);
-							motorSet(Mid2, -127);
-							motorSet(LeftMot, -127);
-							motorSet(LeftMotT, -127);
-							motorSet(RightMot, -127);
-							motorSet(RightMotT, -127);
-					}
-					//if we have no input then just stop everything
-					if(!joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) < 30 && joystickGetAnalog(MAIN_JOY, 4) > -30))
-					{
-							motorStop(LeftMot);
-							motorStop(LeftMotT);
-							motorStop(RightMot);
-							motorStop(RightMotT);
-							motorStop(Mid);
-							motorStop(Mid2);
-					}
-					//if we are not turning and we are hitting the forward button, then simply go forward
-					if(joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) < 30 && joystickGetAnalog(MAIN_JOY, 4) > -30))
-					{
-							motorSet(Mid, 127);
-							motorSet(Mid2, 127);
-							motorSet(LeftMot,  127);
-							motorSet(LeftMotT,  127);
-							motorSet(RightMot, 127);
-							motorSet(RightMotT, 127);
-					}
-		}
+
+				//if we are not turning and we are hitting the backward button, then simply go backward
+				if(joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) < 30 && joystickGetAnalog(MAIN_JOY, 4) > -30))
+				{
+						motorSet(Mid, -127);
+						motorSet(Mid2, -127);
+						motorSet(LeftMot, -127);
+						motorSet(LeftMotT, -127);
+						motorSet(RightMot, -127);
+						motorSet(RightMotT, -127);
+				}
+				//if we have no input then just stop everything
+				if(!joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) < 30 && joystickGetAnalog(MAIN_JOY, 4) > -30))
+				{
+						motorStop(LeftMot);
+						motorStop(LeftMotT);
+						motorStop(RightMot);
+						motorStop(RightMotT);
+						motorStop(Mid);
+						motorStop(Mid2);
+				}
+				//if we are not turning and we are hitting the forward button, then simply go forward
+				if(joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) < 30 && joystickGetAnalog(MAIN_JOY, 4) > -30))
+				{
+						motorSet(Mid, 127);
+						motorSet(Mid2, 127);
+						motorSet(LeftMot,  127);
+						motorSet(LeftMotT,  127);
+						motorSet(RightMot, 127);
+						motorSet(RightMotT, 127);
+				}
+
 	}
 }
