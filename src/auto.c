@@ -7,6 +7,9 @@
    	motorSet(PMotor2, -127);
 
    	delay(2000);
+
+    motorStop(PMotor);
+    motorStop(PMotor2);
  }
  //go forward for a number of degrees,
  void goForward(int rotDeg)

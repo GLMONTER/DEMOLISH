@@ -31,9 +31,7 @@
 
 #define LeftMot 1
 #define LeftMotT 2
-#define Mid 3
 
-#define Mid2 8
 #define RightMot 10
 #define RightMotT 9
 
