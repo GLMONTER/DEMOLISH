@@ -24,11 +24,9 @@
  		{
  				motorSet(RightMot, -127);
  				motorSet(RightMotT, -127);
- 				motorSet(Mid2, -127);
 
  				motorSet(LeftMot, -127);
  				motorSet(LeftMotT, -127);
- 				motorSet(Mid, -127);
  		}
  	}
  	//if rotDeg is not less than zero then go forward until encoder reads rotDeg
@@ -38,11 +36,9 @@
  		{
  				motorSet(RightMot, 127);
  				motorSet(RightMotT, 127);
- 				motorSet(Mid2, 127);
 
  				motorSet(LeftMot, 127);
  				motorSet(LeftMotT, 127);
- 				motorSet(Mid, 127);
  		}
  	}
  	//stop all motors and reset encoders to zero
@@ -67,11 +63,9 @@
  	{
  			motorSet(RightMot, -127);
  			motorSet(RightMotT, -127);
- 			motorSet(Mid2, -127);
 
  			motorSet(LeftMot, 127);
  			motorSet(LeftMotT, 127);
- 			motorSet(Mid, 127);
  	}
 
  	motorStopAll();
@@ -91,11 +85,9 @@
  	{
  			motorSet(RightMot, 127);
  			motorSet(RightMotT, 127);
- 			motorSet(Mid2, 127);
 
  			motorSet(LeftMot, -127);
  			motorSet(LeftMotT, -127);
- 			motorSet(Mid, -127);
  	}
  	motorStopAll();
  	encoderReset(rightEncoder);
