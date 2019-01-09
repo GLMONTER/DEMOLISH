@@ -16,6 +16,8 @@ int buttonPressedR = 0;
 int flyToggle = 0;
 int flyPressed = 0;
 
+void raceControl();
+
 void pollTFly()
 {
 		if(joystickGetDigital(MAIN_JOY, 8, JOY_RIGHT))
@@ -32,8 +34,8 @@ void pollTFly()
 
 		if(flyToggle)
 		{
-				motorSet(PMotor, 127);
-				motorSet(PMotor2, 127);
+				motorSet(PMotor, -127);
+				motorSet(PMotor2, -127);
 		}
 		else
 			if(!flyToggle)
@@ -133,14 +135,15 @@ void LoadBall()
 
 
 //the default control for the claw bot
-void AltControl()
+void clawControl()
 {
 		while(true)
 		{
+				printf("Right %d\n", encoderGet(rightEncoder));
 				//if we get the up button on button group 8, go back to normal controls and break out of the loop.
 				if(joystickGetDigital(MAIN_JOY, 8, JOY_UP))
 				{
-						operatorControl();
+						raceControl();
 				}
 
 				motorSet(LeftMot, joystickGetAnalog(MAIN_JOY, 3));
@@ -156,14 +159,14 @@ void AltControl()
 		}
 }
 
-void operatorControl()
+void raceControl()
 {
 	while (true)
 	{
 		//if we get the Down button on button group 8, go to the alt controls and break out of the loop.
 		if(joystickGetDigital(MAIN_JOY, 8, JOY_DOWN))
 		{
-			AltControl();
+			clawControl();
 		}
 			pollToggles();
 			LoadBall();
@@ -261,4 +264,8 @@ void operatorControl()
 				}
 
 	}
+}
+void operatorControl()
+{
+		clawControl();
 }

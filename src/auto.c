@@ -1,16 +1,19 @@
 #include "main.h"
 
+void reset()
+{
+    encoderReset(rightEncoder);
+    encoderReset(leftEncoder);
+}
+
+void shoot(unsigned int mili)
+{
+  motorSet(PMotor, -127);
+  motorSet(PMotor2, -127);
+  delay(mili);
+}
+
  //a shoot funciton, if the shooter is set right the delay time is just enough to fire the shooter during an auto period
- void shoot()
- {
-   	motorSet(PMotor, -127);
-   	motorSet(PMotor2, -127);
-
-   	delay(2000);
-
-    motorStop(PMotor);
-    motorStop(PMotor2);
- }
  //go forward for a number of degrees,
  void goForward(int rotDeg)
  {
@@ -105,40 +108,39 @@ void farBlue()
 
  void closeBlue()
  {
-      shoot();
-      goForward(1600);
+     shoot(3000);
+     motorSet(LoadServ, 127);
+     delay(1000);
+     motorStopAll();
+
+     goForward(1600);
  }
  //the auto period for the square closest for the flag
  void closeRed()
  {
-       //so we can exit the loop when we are done with the period
-       bool isDone = false;
+       shoot(3000);
+       motorSet(LoadServ, 127);
+       delay(1000);
+       motorStopAll();
 
-       while(!isDone)
-       {
-         shoot();
+       //go forward from initial square
+       goForward(1200);
 
-         turnLeft(17);
-         //go forward from initial square
-         goForward(1400);
+      // goForward(-1200);
 
-         goForward(-1600);
+       /*
+ 			 turnRight(0);
 
+ 			 goForward(2000);
+       motorStopAll();
+       encoderReset(rightEncoder);
+       encoderReset(leftEncoder);
 
-   			turnRight(0);
-
-   			goForward(2000);
-         motorStopAll();
-         encoderReset(rightEncoder);
-         encoderReset(leftEncoder);
-
-
-         isDone = true;
-
-         //shutdown the encoders, power will be lost and any function calls related to the encoder in the function parameters will be ignored.
-         encoderShutdown(rightEncoder);
-         encoderShutdown(leftEncoder);
-     }
+*/
+       reset();
+       //shutdown the encoders, power will be lost and any function calls related to the encoder in the function parameters will be ignored.
+       encoderShutdown(rightEncoder);
+       encoderShutdown(leftEncoder);
  }
 
 void autonomous()
