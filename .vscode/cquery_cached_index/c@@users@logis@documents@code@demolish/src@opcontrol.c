@@ -16,11 +16,14 @@ int buttonPressedR = 0;
 int flyToggle = 0;
 int flyPressed = 0;
 
+int reverseToggle = 0;
+int reversePressed = 0;
+
 void raceControl();
 
 void pollTFly()
 {
-		if(joystickGetDigital(MAIN_JOY, 8, JOY_RIGHT))
+		if(joystickGetDigital(MAIN_JOY, 6, JOY_UP))
 		{
 				if(!flyPressed)
 				{
@@ -50,7 +53,7 @@ void pollTFly()
 void pollToggles()
 {
 		//go forward with drum
-		if(joystickGetDigital(MAIN_JOY, 7, JOY_RIGHT))
+		if(joystickGetDigital(MAIN_JOY, 5, JOY_UP))
 		{
 				//if the forward button toggle isn't on then continute
 				if(!buttonPressedF)
@@ -82,7 +85,7 @@ else
 }
 
 	//go backwards with drum
-	if(joystickGetDigital(MAIN_JOY, 7, JOY_LEFT))
+	if(joystickGetDigital(MAIN_JOY, 5, JOY_DOWN))
 	{
 			//if we haven't pressed the button then toggle the button
 			if(!buttonPressedR)
@@ -115,156 +118,58 @@ else
 			}
 	}
 }
-//the funciton that loads the ball using a hold button
-void LoadBall()
-{
-		//handling the main loader
-		if(joystickGetDigital(MAIN_JOY, 7, JOY_UP))
-		{
-				motorSet(LoadMot, 127);
-		}
-		if(joystickGetDigital(MAIN_JOY, 7, JOY_DOWN))
-		{
-				motorSet(LoadMot, -127);
-		}
-		if(!joystickGetDigital(MAIN_JOY, 7, JOY_UP) && !joystickGetDigital(MAIN_JOY, 7, JOY_DOWN))
-		{
-			motorStop(LoadMot);
-		}
-}
 
-
+bool rev = false;
 //the default control for the claw bot
 void clawControl()
 {
 		while(true)
 		{
-				printf("Right %d\n", encoderGet(rightEncoder));
-				//if we get the up button on button group 8, go back to normal controls and break out of the loop.
-				if(joystickGetDigital(MAIN_JOY, 8, JOY_UP))
+			if(joystickGetDigital(MAIN_JOY, 6, JOY_DOWN))
+			{
+					if(!reversePressed)
+					{
+							reverseToggle = 1 - reverseToggle;
+
+							reversePressed = 1;
+					}
+			}
+			else
+				reversePressed = 0;
+
+			if(reverseToggle)
+			{
+					rev = true;
+			}
+			else
+				if(!reverseToggle)
 				{
-						raceControl();
+						rev = false;
 				}
 
-				motorSet(LeftMot, joystickGetAnalog(MAIN_JOY, 3));
-				motorSet(LeftMotT, joystickGetAnalog(MAIN_JOY, 3));
+				//printf("Right %d\n", encoderGet(rightEncoder));
+				if(!rev)
+				{
+					motorSet(LeftMot, joystickGetAnalog(MAIN_JOY, 3));
+					motorSet(LeftMotT, joystickGetAnalog(MAIN_JOY, 3));
 
-				motorSet(RightMot, joystickGetAnalog(MAIN_JOY, 2));
-				motorSet(RightMotT, joystickGetAnalog(MAIN_JOY, 2));
+					motorSet(RightMot, joystickGetAnalog(MAIN_JOY, 2));
+					motorSet(RightMotT, joystickGetAnalog(MAIN_JOY, 2));
+				}
+				else
+				{
+					motorSet(LeftMot, -joystickGetAnalog(MAIN_JOY, 2));
+					motorSet(LeftMotT, -joystickGetAnalog(MAIN_JOY, 2));
 
+					motorSet(RightMot, -joystickGetAnalog(MAIN_JOY, 3));
+					motorSet(RightMotT, -joystickGetAnalog(MAIN_JOY, 3));
+				}
 				//poll the shooter, loader, and drum toggle functions
 				pollTFly();
-				LoadBall();
 				pollToggles();
 		}
 }
 
-void raceControl()
-{
-	while (true)
-	{
-		//if we get the Down button on button group 8, go to the alt controls and break out of the loop.
-		if(joystickGetDigital(MAIN_JOY, 8, JOY_DOWN))
-		{
-			clawControl();
-		}
-			pollToggles();
-			LoadBall();
-			pollTFly();
-			//MAIN_JOY = 1 which is the main controller, 6 is the button group, and JOY_DOWN is the down button in button group 6
-			//if were hitting the forward button and are attempting to turn then turn based on the analog output of the controller joysticks + the forward button.
-			if(!joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) > 30 || joystickGetAnalog(MAIN_JOY, 4) < -30))
-			{
-					if(joystickGetAnalog(MAIN_JOY, 4) > 30)
-					{
-							motorSet(LeftMot, 127);
-							motorSet(LeftMotT, 127);
-							//this arithmetic makes the left motors equal to its top speed minus the Joysticks horizontal. With this, the car can achieve smooth turning.
-							motorSet(RightMot, 127 - joystickGetAnalog(MAIN_JOY, 4));
-							motorSet(RightMotT, 127 - joystickGetAnalog(MAIN_JOY, 4));
-					}
-
-					if(joystickGetAnalog(MAIN_JOY, 4) < -30)
-					{
-							motorSet(RightMot, 127);
-							motorSet(RightMotT, 127);
-							//this arithmetic makes the left motors equal to its top speed minus the Joysticks horizontal. With this, the car can achieve smooth turning.
-							motorSet(LeftMot, 127 - -(joystickGetAnalog(MAIN_JOY, 4)));
-							motorSet(LeftMotT, 127 - -(joystickGetAnalog(MAIN_JOY, 4)));
-					}
-			}
-			//if we are not hitting the back or forward buttons, and we are attempting to turn, then rotate the car(Reverse the motors).
-			//simple: turning without going backwards or forward.
-			if(!joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) > 30 || joystickGetAnalog(MAIN_JOY, 4) < -30))
-			{
-					if(joystickGetAnalog(MAIN_JOY, 4) > 5)
-					{
-							motorSet(RightMot, -joystickGetAnalog(MAIN_JOY, 4));
-							motorSet(RightMotT,	-joystickGetAnalog(MAIN_JOY, 4));
-							motorSet(LeftMot, joystickGetAnalog(MAIN_JOY, 4));
-							motorSet(LeftMotT, joystickGetAnalog(MAIN_JOY, 4));
-					}
-
-					if(joystickGetAnalog(MAIN_JOY, 4) < -5)
-					{
-						motorSet(RightMot, -joystickGetAnalog(MAIN_JOY, 4));
-						motorSet(RightMotT, -joystickGetAnalog(MAIN_JOY, 4));
-						motorSet(LeftMot, joystickGetAnalog(MAIN_JOY, 4));
-						motorSet(LeftMotT, joystickGetAnalog(MAIN_JOY, 4));
-					}
-			}
-			//if hit Back button and we are attempting to turn, ajust the motors according to going backwards and the joystick analog output.
-			//simple : Going back and turning at the same time
-			if(joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) > 30 || joystickGetAnalog(MAIN_JOY, 4) < -30))
-			{
-					if(joystickGetAnalog(MAIN_JOY, 4) > 30)
-					{
-							motorSet(RightMot, -127);
-							motorSet(RightMotT, -127);
-							//this arithmetic makes the left motors equal to its top speed minus the Joysticks horizontal. With this, the car can achieve smooth turning.
-							motorSet(LeftMot, 127 - -joystickGetAnalog(MAIN_JOY, 4));
-							motorSet(LeftMotT, 127 - -joystickGetAnalog(MAIN_JOY, 4));
-					}
-
-					if(joystickGetAnalog(MAIN_JOY, 4) < -30)
-					{
-						motorSet(LeftMot, -127);
-						motorSet(LeftMotT, -127);
-						//this arithmetic makes the left motors equal to its top speed minus the Joysticks horizontal. With this, the car can achieve smooth turning.
-						motorSet(RightMot, (127 - joystickGetAnalog(MAIN_JOY, 4)));
-						motorSet(RightMotT, (127 - joystickGetAnalog(MAIN_JOY, 4)));
-					}
-
-			}
-			//this Block of Code handles basic forward and backward functionality, and also stopping the car if there is no input
-
-				//if we are not turning and we are hitting the backward button, then simply go backward
-				if(joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) < 30 && joystickGetAnalog(MAIN_JOY, 4) > -30))
-				{
-						motorSet(LeftMot, -127);
-						motorSet(LeftMotT, -127);
-						motorSet(RightMot, -127);
-						motorSet(RightMotT, -127);
-				}
-				//if we have no input then just stop everything
-				if(!joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) < 30 && joystickGetAnalog(MAIN_JOY, 4) > -30))
-				{
-						motorStop(LeftMot);
-						motorStop(LeftMotT);
-						motorStop(RightMot);
-						motorStop(RightMotT);
-				}
-				//if we are not turning and we are hitting the forward button, then simply go forward
-				if(joystickGetDigital(MAIN_JOY, 6, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) && (joystickGetAnalog(MAIN_JOY, 4) < 30 && joystickGetAnalog(MAIN_JOY, 4) > -30))
-				{
-						motorSet(LeftMot,  127);
-						motorSet(LeftMotT,  127);
-						motorSet(RightMot, 127);
-						motorSet(RightMotT, 127);
-				}
-
-	}
-}
 void operatorControl()
 {
 		clawControl();

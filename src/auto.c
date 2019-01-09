@@ -62,13 +62,13 @@ void shoot(unsigned int mili)
  	encoderReset(leftEncoder);
 
  	//turn left to aim at the blue flag
- 	while(encoderGet(leftEncoder) < deg)
+ 	while(encoderGet(leftEncoder) > -deg)
  	{
- 			motorSet(RightMot, -127);
- 			motorSet(RightMotT, -127);
+ 			motorSet(RightMot, -90);
+ 			motorSet(RightMotT, -90);
 
- 			motorSet(LeftMot, 127);
- 			motorSet(LeftMotT, 127);
+ 			motorSet(LeftMot, 90);
+ 			motorSet(LeftMotT, 90);
  	}
 
  	motorStopAll();
@@ -99,44 +99,52 @@ void shoot(unsigned int mili)
 
 void farBlue()
 {
-    goForward(1600);
+    goForward(-500);
 
-    turnRight(0);
+    motorStopAll();
 
-    goForward(2000);
+    turnRight(340);
+
+    goForward(-1400);
+
 }
 
  void closeBlue()
  {
-     shoot(3000);
-     motorSet(LoadServ, 127);
-     delay(1000);
-     motorStopAll();
+   shoot(4000);
+   motorSet(LoadServ, 127);
+   delay(1000);
+   motorStopAll();
 
-     goForward(1600);
+   turnLeft(310);
+
+   goForward(-750);
+
+   turnLeft(360);
+
+   goForward(-1500);
+
+   reset();
+   //shutdown the encoders, power will be lost and any function calls related to the encoder in the function parameters will be ignored.
+   encoderShutdown(rightEncoder);
+   encoderShutdown(leftEncoder);
  }
  //the auto period for the square closest for the flag
  void closeRed()
  {
-       shoot(3000);
+       shoot(4000);
        motorSet(LoadServ, 127);
        delay(1000);
        motorStopAll();
 
-       //go forward from initial square
-       goForward(1200);
+       turnRight(310);
 
-      // goForward(-1200);
+       goForward(-750);
 
-       /*
- 			 turnRight(0);
+       turnRight(360);
 
- 			 goForward(2000);
-       motorStopAll();
-       encoderReset(rightEncoder);
-       encoderReset(leftEncoder);
+       goForward(-1500);
 
-*/
        reset();
        //shutdown the encoders, power will be lost and any function calls related to the encoder in the function parameters will be ignored.
        encoderShutdown(rightEncoder);
@@ -145,5 +153,5 @@ void farBlue()
 
 void autonomous()
 {
-  //closeRed();
+  farBlue();
 }
