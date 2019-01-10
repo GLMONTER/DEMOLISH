@@ -48,7 +48,6 @@ void pollTFly()
 			}
 }
 
-
 //for toggling the drum and soon other toggles
 void pollToggles()
 {
@@ -142,10 +141,12 @@ void clawControl()
 					rev = true;
 			}
 			else
+			{
 				if(!reverseToggle)
 				{
 						rev = false;
 				}
+			}
 
 				//printf("Right %d\n", encoderGet(rightEncoder));
 				if(!rev)
