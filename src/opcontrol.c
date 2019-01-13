@@ -23,7 +23,7 @@ void raceControl();
 
 void pollTFly()
 {
-		if(joystickGetDigital(MAIN_JOY, 6, JOY_UP))
+		if(joystickGetDigital(MAIN_JOY, 6, JOY_UP) || joystickGetDigital(PART_JOY, 6, JOY_UP))
 		{
 				if(!flyPressed)
 				{
@@ -52,7 +52,7 @@ void pollTFly()
 void pollToggles()
 {
 		//go forward with drum
-		if(joystickGetDigital(MAIN_JOY, 5, JOY_UP))
+		if(joystickGetDigital(MAIN_JOY, 5, JOY_UP) || joystickGetDigital(PART_JOY, 5, JOY_UP))
 		{
 				//if the forward button toggle isn't on then continute
 				if(!buttonPressedF)
@@ -84,7 +84,7 @@ else
 }
 
 	//go backwards with drum
-	if(joystickGetDigital(MAIN_JOY, 5, JOY_DOWN))
+	if(joystickGetDigital(MAIN_JOY, 5, JOY_DOWN) || joystickGetDigital(PART_JOY, 5, JOY_DOWN))
 	{
 			//if we haven't pressed the button then toggle the button
 			if(!buttonPressedR)
