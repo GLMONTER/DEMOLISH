@@ -6,6 +6,17 @@ void reset()
     encoderReset(leftEncoder);
 }
 
+void load(unsigned int mili)
+{
+    motorSet(LoadServ, 127);
+    delay(mili);
+    motorStop(LoadServ);
+}
+
+void loadF()
+{
+    motorSet(LoadServ, 127);
+}
 void shoot(unsigned int mili)
 {
   motorSet(PMotor, -127);
@@ -17,7 +28,11 @@ void shoot(unsigned int mili)
  //go forward for a number of degrees,
  void goForward(int rotDeg)
  {
- 	motorStopAll();
+   motorStop(LeftMot);
+   motorStop(LeftMotT);
+   motorStop(RightMot);
+   motorStop(RightMotT);
+
  	encoderReset(rightEncoder);
  	encoderReset(leftEncoder);
  	//if rotDeg less than zero then go backward until the encoder reads rotDeg
@@ -45,7 +60,10 @@ void shoot(unsigned int mili)
  		}
  	}
  	//stop all motors and reset encoders to zero
- 	motorStopAll();
+  motorStop(LeftMot);
+  motorStop(LeftMotT);
+  motorStop(RightMot);
+  motorStop(RightMotT);
  	encoderReset(rightEncoder);
  	encoderReset(leftEncoder);
  }
@@ -55,14 +73,18 @@ void shoot(unsigned int mili)
  void turnRight(int deg)
  {
  	if(deg == 0)
- 			deg = 280;
+ 			deg = 260;
 
- 	motorStopAll();
+      motorStop(LeftMot);
+      motorStop(LeftMotT);
+      motorStop(RightMot);
+      motorStop(RightMotT);
+
  	encoderReset(rightEncoder);
  	encoderReset(leftEncoder);
 
  	//turn left to aim at the blue flag
- 	while(encoderGet(leftEncoder) > -deg)
+ 	while(encoderGet(rightEncoder) > (deg * -1))
  	{
  			motorSet(RightMot, -90);
  			motorSet(RightMotT, -90);
@@ -71,15 +93,24 @@ void shoot(unsigned int mili)
  			motorSet(LeftMotT, 90);
  	}
 
- 	motorStopAll();
+  motorStop(LeftMot);
+  motorStop(LeftMotT);
+  motorStop(RightMot);
+  motorStop(RightMotT);
  	encoderReset(rightEncoder);
  	encoderReset(leftEncoder);
  }
  void turnLeft(int deg)
  {
  	if(deg == 0)
- 			deg = 280;
- 	motorStopAll();
+ 			deg = 260;
+  if(deg == 6969)
+    deg = 280;
+ 	motorStop(LeftMot);
+  motorStop(LeftMotT);
+  motorStop(RightMot);
+  motorStop(RightMotT);
+
  	encoderReset(rightEncoder);
  	encoderReset(leftEncoder);
 
@@ -92,21 +123,26 @@ void shoot(unsigned int mili)
  			motorSet(LeftMot, -127);
  			motorSet(LeftMotT, -127);
  	}
- 	motorStopAll();
+  motorStop(LeftMot);
+  motorStop(LeftMotT);
+  motorStop(RightMot);
+  motorStop(RightMotT);
  	encoderReset(rightEncoder);
  	encoderReset(leftEncoder);
  }
 
 void farBlue()
 {
-    goForward(-500);
-
-    motorStopAll();
-
-    turnRight(340);
-
-    goForward(-1400);
-
+    shoot(4000);
+    loadF();
+    delay(750);
+    motorStop(PMotor);
+    motorStop(PMotor2);
+    turnLeft(6969);
+    goForward(1100);
+    goForward(-100);
+    turnLeft(0);
+    goForward(-1350);
 }
 
  void closeBlue()
