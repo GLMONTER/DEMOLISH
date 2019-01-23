@@ -74,7 +74,8 @@ void shoot(unsigned int mili)
  {
  	if(deg == 0)
  			deg = 260;
-
+  if(deg == 6969)
+      deg = 280;
       motorStop(LeftMot);
       motorStop(LeftMotT);
       motorStop(RightMot);
@@ -139,10 +140,9 @@ void farBlue()
     motorStop(PMotor);
     motorStop(PMotor2);
     turnLeft(6969);
-    goForward(1100);
-    goForward(-100);
-    turnLeft(0);
-    goForward(-1350);
+    goForward(1150);
+    turnLeft(6969);
+    goForward(-1300);
 }
 
  void closeBlue()
@@ -165,6 +165,20 @@ void farBlue()
    encoderShutdown(rightEncoder);
    encoderShutdown(leftEncoder);
  }
+
+void farRed()
+{
+    shoot(4000);
+    loadF();
+    delay(750);
+    motorStop(PMotor);
+    motorStop(PMotor2);
+    turnRight(260);
+    goForward(750);
+    turnRight(260);
+    goForward(-1275);
+}
+
  //the auto period for the square closest for the flag
  void closeRed()
  {
