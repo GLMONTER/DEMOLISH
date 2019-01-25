@@ -132,17 +132,31 @@ void shoot(unsigned int mili)
  	encoderReset(leftEncoder);
  }
 
+void ofarBlue()
+{
+  shoot(4000);
+  loadF();
+  delay(750);
+  motorStop(PMotor);
+  motorStop(PMotor2);
+  turnLeft(6969);
+  goForward(1050);
+  turnLeft(290);
+  goForward(-1400);
+}
+
 void farBlue()
 {
-    shoot(4000);
-    loadF();
-    delay(750);
-    motorStop(PMotor);
-    motorStop(PMotor2);
-    turnLeft(6969);
-    goForward(1150);
-    turnLeft(6969);
-    goForward(-1300);
+  shoot(4000);
+  loadF();
+  delay(750);
+  motorStop(PMotor);
+  motorStop(PMotor2);
+  motorStop(LoadServ);
+  turnLeft(6969);
+  goForward(950);
+  turnLeft(410);
+  goForward(-1200);
 }
 
  void closeBlue()
@@ -176,7 +190,7 @@ void farRed()
     turnRight(260);
     goForward(750);
     turnRight(260);
-    goForward(-1275);
+    goForward(-1350);
 }
 
  //the auto period for the square closest for the flag
@@ -203,5 +217,5 @@ void farRed()
 
 void autonomous()
 {
-  farBlue();
+  farRed();
 }
