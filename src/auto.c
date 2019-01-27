@@ -6,6 +6,39 @@ void reset()
     encoderReset(leftEncoder);
 }
 
+void stopDrive()
+{
+  motorStop(LeftMot);
+  motorStop(LeftMotT);
+  motorStop(RightMot);
+  motorStop(RightMotT);
+}
+
+void brake(int brakeType)
+{
+  if(brakeType == 0)
+  {
+    motorSet(LeftMot, -127);
+    motorSet(LeftMotT, -127);
+    motorSet(RightMot, -127);
+    motorSet(RightMotT, -127);
+  }
+  else
+  {
+    if(brakeType == 1)
+    {
+      motorSet(LeftMot, 127);
+      motorSet(LeftMotT, 127);
+      motorSet(RightMot, 127);
+      motorSet(RightMotT, 127);
+    }
+  }
+delay(100);
+stopDrive();
+reset();
+}
+
+
 void load(unsigned int mili)
 {
     motorSet(LoadServ, 127);
@@ -19,9 +52,9 @@ void loadF()
 }
 void shoot(unsigned int mili)
 {
-  motorSet(PMotor, -127);
-  motorSet(PMotor2, -127);
-  delay(mili);
+    motorSet(PMotor, -127);
+    motorSet(PMotor2, -127);
+    delay(mili);
 }
 
  //a shoot funciton, if the shooter is set right the delay time is just enough to fire the shooter during an auto period
@@ -98,6 +131,10 @@ void shoot(unsigned int mili)
   motorStop(LeftMotT);
   motorStop(RightMot);
   motorStop(RightMotT);
+
+  //this delay is to prevent the encoder from counting past zero after we shutoff the drive motors due to the bot still spinning.
+  delay(500);
+
  	encoderReset(rightEncoder);
  	encoderReset(leftEncoder);
  }
@@ -128,6 +165,9 @@ void shoot(unsigned int mili)
   motorStop(LeftMotT);
   motorStop(RightMot);
   motorStop(RightMotT);
+  //this delay is to prevent the encoder from counting past zero after we shutoff the drive motors due to the bot still spinning.
+  delay(500);
+
  	encoderReset(rightEncoder);
  	encoderReset(leftEncoder);
  }
@@ -147,16 +187,15 @@ void ofarBlue()
 
 void farBlue()
 {
-  shoot(4000);
+  shoot(3000);
   loadF();
   delay(750);
   motorStop(PMotor);
   motorStop(PMotor2);
-  motorStop(LoadServ);
-  turnLeft(6969);
-  goForward(950);
-  turnLeft(410);
-  goForward(-1200);
+  //turnRight(230);
+  goForward(440);
+  turnRight(270);
+  goForward(-1850);
 }
 
  void closeBlue()
@@ -182,15 +221,15 @@ void farBlue()
 
 void farRed()
 {
-    shoot(4000);
+    shoot(3000);
     loadF();
     delay(750);
     motorStop(PMotor);
     motorStop(PMotor2);
-    turnRight(260);
-    goForward(750);
-    turnRight(260);
-    goForward(-1350);
+    //turnRight(230);
+    goForward(455);
+    turnLeft(375);
+    goForward(-1850);
 }
 
  //the auto period for the square closest for the flag
@@ -214,6 +253,50 @@ void farRed()
        encoderShutdown(rightEncoder);
        encoderShutdown(leftEncoder);
  }
+
+//the auton code for the 1 min skills run starting in the far red square
+void skills()
+{
+  shoot(3000);
+  loadF();
+  delay(750);
+  motorStop(PMotor);
+  motorStop(PMotor2);
+
+  turnRight(210);
+
+  goForward(750);
+
+  stopDrive();
+
+  delay(500);
+
+  motorStop(LoadServ);
+
+  turnLeft(210);
+
+  //goForward(-100);
+
+//shoot second flag
+  shoot(3000);
+  loadF();
+  delay(750);
+  motorStopAll();
+
+  turnLeft(210);
+
+  goForward(800);
+
+  turnRight(210);
+
+  goForward(1300);
+
+  turnRight(210);
+
+  goForward(750);
+
+
+}
 
 void autonomous()
 {
