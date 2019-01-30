@@ -56,6 +56,7 @@
 
 #include <API.h>
 
+enum BrakeType {Normal, Opposing, Left, Right};
 
 Encoder rightEncoder;
 Encoder leftEncoder;

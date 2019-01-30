@@ -8,34 +8,45 @@ void reset()
 
 void stopDrive()
 {
-  motorStop(LeftMot);
-  motorStop(LeftMotT);
-  motorStop(RightMot);
-  motorStop(RightMotT);
+    motorStop(LeftMot);
+    motorStop(LeftMotT);
+    motorStop(RightMot);
+    motorStop(RightMotT);
 }
 
-void brake(int brakeType)
+void brake(enum BrakeType b)
 {
-  if(brakeType == 0)
-  {
-    motorSet(LeftMot, -127);
-    motorSet(LeftMotT, -127);
-    motorSet(RightMot, -127);
-    motorSet(RightMotT, -127);
-  }
-  else
-  {
-    if(brakeType == 1)
+    if(b == Normal)
     {
-      motorSet(LeftMot, 127);
-      motorSet(LeftMotT, 127);
-      motorSet(RightMot, 127);
-      motorSet(RightMotT, 127);
+        motorSet(LeftMot, -127);
+        motorSet(LeftMotT, -127);
+        motorSet(RightMot, -127);
+        motorSet(RightMotT, -127);
     }
-  }
-delay(100);
-stopDrive();
-reset();
+    if(b == Opposing)
+    {
+        motorSet(LeftMot, 127);
+        motorSet(LeftMotT, 127);
+        motorSet(RightMot, 127);
+        motorSet(RightMotT, 127);
+    }
+    if(b == Left)
+    {
+        motorSet(LeftMot, 127);
+        motorSet(LeftMotT, 127);
+        motorSet(RightMot, -127);
+        motorSet(RightMotT, -127);
+    }
+    if(b == Right)
+    {
+        motorSet(LeftMot, -127);
+        motorSet(LeftMotT, -127);
+        motorSet(RightMot, 127);
+        motorSet(RightMotT, 127);
+    }
+  delay(100);
+  stopDrive();
+  reset();
 }
 
 
@@ -50,6 +61,7 @@ void loadF()
 {
     motorSet(LoadServ, 127);
 }
+
 void shoot(unsigned int mili)
 {
     motorSet(PMotor, -127);
@@ -61,141 +73,122 @@ void shoot(unsigned int mili)
  //go forward for a number of degrees,
  void goForward(int rotDeg)
  {
-   motorStop(LeftMot);
-   motorStop(LeftMotT);
-   motorStop(RightMot);
-   motorStop(RightMotT);
+    stopDrive();
 
- 	encoderReset(rightEncoder);
- 	encoderReset(leftEncoder);
- 	//if rotDeg less than zero then go backward until the encoder reads rotDeg
- 	if(rotDeg < 0)
- 	{
- 		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) > rotDeg)
- 		{
- 				motorSet(RightMot, -127);
- 				motorSet(RightMotT, -127);
+   	encoderReset(rightEncoder);
+   	encoderReset(leftEncoder);
+   	//if rotDeg less than zero then go backward until the encoder reads rotDeg
+   	if(rotDeg < 0)
+   	{
+   		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) > rotDeg)
+   		{
+   				motorSet(RightMot, -127);
+   				motorSet(RightMotT, -127);
 
- 				motorSet(LeftMot, -127);
- 				motorSet(LeftMotT, -127);
- 		}
- 	}
- 	//if rotDeg is not less than zero then go forward until encoder reads rotDeg
- 	else
- 	{
- 		while(encoderGet(rightEncoder) < rotDeg && encoderGet(leftEncoder) < rotDeg)
- 		{
- 				motorSet(RightMot, 127);
- 				motorSet(RightMotT, 127);
+   				motorSet(LeftMot, -127);
+   				motorSet(LeftMotT, -127);
+   		}
+   	}
+   	//if rotDeg is not less than zero then go forward until encoder reads rotDeg
+   	else
+   	{
+   		while(encoderGet(rightEncoder) < rotDeg && encoderGet(leftEncoder) < rotDeg)
+   		{
+   				motorSet(RightMot, 127);
+   				motorSet(RightMotT, 127);
 
- 				motorSet(LeftMot, 127);
- 				motorSet(LeftMotT, 127);
- 		}
- 	}
- 	//stop all motors and reset encoders to zero
-  motorStop(LeftMot);
-  motorStop(LeftMotT);
-  motorStop(RightMot);
-  motorStop(RightMotT);
- 	encoderReset(rightEncoder);
- 	encoderReset(leftEncoder);
+   				motorSet(LeftMot, 127);
+   				motorSet(LeftMotT, 127);
+   		}
+   	}
+    if(rotDeg < 0)
+    {
+        brake(Opposing);
+    }
+    else
+      brake(Normal);
+
+   	encoderReset(rightEncoder);
+   	encoderReset(leftEncoder);
  }
 
 
  //a funciton that turns right, if deg is equal zero or default then turn exactly 90 degrees.
  void turnRight(int deg)
  {
- 	if(deg == 0)
- 			deg = 260;
-  if(deg == 6969)
-      deg = 280;
-      motorStop(LeftMot);
-      motorStop(LeftMotT);
-      motorStop(RightMot);
-      motorStop(RightMotT);
+   	if(deg == 0)
+   			deg = 260;
+    if(deg == 6969)
+        deg = 305;
 
- 	encoderReset(rightEncoder);
- 	encoderReset(leftEncoder);
+    stopDrive();
 
- 	//turn left to aim at the blue flag
- 	while(encoderGet(rightEncoder) > (deg * -1))
- 	{
- 			motorSet(RightMot, -90);
- 			motorSet(RightMotT, -90);
+   	encoderReset(rightEncoder);
+   	encoderReset(leftEncoder);
 
- 			motorSet(LeftMot, 90);
- 			motorSet(LeftMotT, 90);
- 	}
+   	//turn left to aim at the blue flag
+   	while(encoderGet(rightEncoder) > (deg * -1))
+   	{
+   			motorSet(RightMot, -90);
+   			motorSet(RightMotT, -90);
 
-  motorStop(LeftMot);
-  motorStop(LeftMotT);
-  motorStop(RightMot);
-  motorStop(RightMotT);
+   			motorSet(LeftMot, 90);
+   			motorSet(LeftMotT, 90);
+   	}
 
-  //this delay is to prevent the encoder from counting past zero after we shutoff the drive motors due to the bot still spinning.
-  delay(500);
+    stopDrive();
 
- 	encoderReset(rightEncoder);
- 	encoderReset(leftEncoder);
+    //this delay is to prevent the encoder from counting past zero after we shutoff the drive motors due to the bot still spinning.
+
+    brake(Right);
+
+   	encoderReset(rightEncoder);
+   	encoderReset(leftEncoder);
  }
  void turnLeft(int deg)
  {
- 	if(deg == 0)
- 			deg = 260;
-  if(deg == 6969)
-    deg = 280;
- 	motorStop(LeftMot);
-  motorStop(LeftMotT);
-  motorStop(RightMot);
-  motorStop(RightMotT);
+   	if(deg == 0)
+   			deg = 260;
+    if(deg == 6969)
+      deg = 305;
 
- 	encoderReset(rightEncoder);
- 	encoderReset(leftEncoder);
+    stopDrive();
+
+   	encoderReset(rightEncoder);
+   	encoderReset(leftEncoder);
 
  	//turn left to aim at the blue flag
- 	while(encoderGet(rightEncoder) < deg)
- 	{
- 			motorSet(RightMot, 127);
- 			motorSet(RightMotT, 127);
+   	while(encoderGet(rightEncoder) < deg)
+   	{
+   			motorSet(RightMot, 127);
+   			motorSet(RightMotT, 127);
 
- 			motorSet(LeftMot, -127);
- 			motorSet(LeftMotT, -127);
- 	}
-  motorStop(LeftMot);
-  motorStop(LeftMotT);
-  motorStop(RightMot);
-  motorStop(RightMotT);
-  //this delay is to prevent the encoder from counting past zero after we shutoff the drive motors due to the bot still spinning.
-  delay(500);
+   			motorSet(LeftMot, -127);
+   			motorSet(LeftMotT, -127);
+   	}
 
- 	encoderReset(rightEncoder);
- 	encoderReset(leftEncoder);
+    stopDrive();
+
+    //this delay is to prevent the encoder from counting past zero after we shutoff the drive motors due to the bot still spinning.
+
+    brake(Left);
+
+   	encoderReset(rightEncoder);
+   	encoderReset(leftEncoder);
  }
-
-void ofarBlue()
-{
-  shoot(4000);
-  loadF();
-  delay(750);
-  motorStop(PMotor);
-  motorStop(PMotor2);
-  turnLeft(6969);
-  goForward(1050);
-  turnLeft(290);
-  goForward(-1400);
-}
 
 void farBlue()
 {
-  shoot(3000);
+  shoot(5000);
   loadF();
   delay(750);
   motorStop(PMotor);
   motorStop(PMotor2);
-  //turnRight(230);
-  goForward(440);
-  turnRight(270);
+  /*
+  goForward(675);
+  turnRight(460);
   goForward(-1850);
+  */
 }
 
  void closeBlue()
@@ -227,7 +220,7 @@ void farRed()
     motorStop(PMotor);
     motorStop(PMotor2);
     //turnRight(230);
-    goForward(455);
+    goForward(510);
     turnLeft(375);
     goForward(-1850);
 }
@@ -235,23 +228,43 @@ void farRed()
  //the auto period for the square closest for the flag
  void closeRed()
  {
-       shoot(4000);
-       motorSet(LoadServ, 127);
-       delay(1000);
-       motorStopAll();
+       motorSet(PMotor, -127);
+       motorSet(PMotor2, -127);
+       goForward(250);
 
-       turnRight(310);
+       delay(3000);
 
-       goForward(-750);
+       loadF();
+       delay(500);
 
-       turnRight(360);
+       goForward(800);
 
+       goForward(-1275);
+
+       turnRight(6969);
+
+       goForward(1100);
+
+       delay(250);
+
+       motorStop(LoadServ);
+
+       turnLeft(240);
+
+       loadF();
+
+       delay(3000);
+
+/*
        goForward(-1500);
 
-       reset();
-       //shutdown the encoders, power will be lost and any function calls related to the encoder in the function parameters will be ignored.
-       encoderShutdown(rightEncoder);
-       encoderShutdown(leftEncoder);
+       turnRight(75);
+
+       loadF();
+
+       delay(1500);
+       */
+
  }
 
 //the auton code for the 1 min skills run starting in the far red square
@@ -294,11 +307,9 @@ void skills()
   turnRight(210);
 
   goForward(750);
-
-
 }
 
 void autonomous()
 {
-  farRed();
+  closeRed();
 }
