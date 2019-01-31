@@ -44,7 +44,7 @@ void brake(enum BrakeType b)
         motorSet(RightMot, 127);
         motorSet(RightMotT, 127);
     }
-  delay(100);
+  delay(50);
   stopDrive();
   reset();
 }
@@ -228,24 +228,29 @@ void farRed()
  //the auto period for the square closest for the flag
  void closeRed()
  {
+       //shoot the ball at the 3rd flag
        motorSet(PMotor, -127);
        motorSet(PMotor2, -127);
        goForward(250);
-
        delay(3000);
-
        loadF();
        delay(500);
 
+       //move forward and melee the bottom flag
        goForward(800);
 
+       //go back and get ready to turn right
        goForward(-1275);
 
+
+       //turn right towards cap
        turnRight(6969);
 
+       //toggle cap and get ball
        goForward(1100);
 
-       delay(250);
+       //give enough time to load ball
+       delay(500);
 
        motorStop(LoadServ);
 
@@ -255,7 +260,6 @@ void farRed()
 
        delay(3000);
 
-/*
        goForward(-1500);
 
        turnRight(75);
@@ -263,50 +267,13 @@ void farRed()
        loadF();
 
        delay(1500);
-       */
 
  }
 
 //the auton code for the 1 min skills run starting in the far red square
 void skills()
 {
-  shoot(3000);
-  loadF();
-  delay(750);
-  motorStop(PMotor);
-  motorStop(PMotor2);
 
-  turnRight(210);
-
-  goForward(750);
-
-  stopDrive();
-
-  delay(500);
-
-  motorStop(LoadServ);
-
-  turnLeft(210);
-
-  //goForward(-100);
-
-//shoot second flag
-  shoot(3000);
-  loadF();
-  delay(750);
-  motorStopAll();
-
-  turnLeft(210);
-
-  goForward(800);
-
-  turnRight(210);
-
-  goForward(1300);
-
-  turnRight(210);
-
-  goForward(750);
 }
 
 void autonomous()
