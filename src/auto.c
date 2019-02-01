@@ -82,6 +82,50 @@ void shoot(unsigned int mili)
    	{
    		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) > rotDeg)
    		{
+   				motorSet(RightMot, -100);
+   				motorSet(RightMotT, -100);
+
+   				motorSet(LeftMot, -100);
+   				motorSet(LeftMotT, -100);
+   		}
+   	}
+   	//if rotDeg is not less than zero then go forward until encoder reads rotDeg
+   	else
+   	{
+   		while(encoderGet(rightEncoder) < rotDeg && encoderGet(leftEncoder) < rotDeg)
+   		{
+   				motorSet(RightMot, 100);
+   				motorSet(RightMotT, 100);
+
+   				motorSet(LeftMot, 100);
+   				motorSet(LeftMotT, 100);
+   		}
+   	}
+    if(rotDeg < 0)
+    {
+        brake(Opposing);
+    }
+    else
+      brake(Normal);
+
+   	encoderReset(rightEncoder);
+   	encoderReset(leftEncoder);
+ }
+
+
+ //a shoot funciton, if the shooter is set right the delay time is just enough to fire the shooter during an auto period
+ //go forward for a number of degrees,
+ void goForwardFast(int rotDeg)
+ {
+    stopDrive();
+
+   	encoderReset(rightEncoder);
+   	encoderReset(leftEncoder);
+   	//if rotDeg less than zero then go backward until the encoder reads rotDeg
+   	if(rotDeg < 0)
+   	{
+   		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) > rotDeg)
+   		{
    				motorSet(RightMot, -127);
    				motorSet(RightMotT, -127);
 
@@ -129,11 +173,11 @@ void shoot(unsigned int mili)
    	//turn left to aim at the blue flag
    	while(encoderGet(rightEncoder) > (deg * -1))
    	{
-   			motorSet(RightMot, -90);
-   			motorSet(RightMotT, -90);
+   			motorSet(RightMot, -100);
+   			motorSet(RightMotT, -100);
 
-   			motorSet(LeftMot, 90);
-   			motorSet(LeftMotT, 90);
+   			motorSet(LeftMot, 100);
+   			motorSet(LeftMotT, 100);
    	}
 
     stopDrive();
@@ -160,11 +204,11 @@ void shoot(unsigned int mili)
  	//turn left to aim at the blue flag
    	while(encoderGet(rightEncoder) < deg)
    	{
-   			motorSet(RightMot, 127);
-   			motorSet(RightMotT, 127);
+   			motorSet(RightMot, 100);
+   			motorSet(RightMotT, 100);
 
-   			motorSet(LeftMot, -127);
-   			motorSet(LeftMotT, -127);
+   			motorSet(LeftMot, -100);
+   			motorSet(LeftMotT, -100);
    	}
 
     stopDrive();
@@ -176,52 +220,66 @@ void shoot(unsigned int mili)
    	encoderReset(rightEncoder);
    	encoderReset(leftEncoder);
  }
-
+//line up with 4th block with tick closest to flag.
 void farBlue()
 {
-  shoot(5000);
+  shoot(4000);
   loadF();
   delay(750);
   motorStop(PMotor);
   motorStop(PMotor2);
-  /*
-  goForward(675);
-  turnRight(460);
-  goForward(-1850);
-  */
+  //turnRight(230);
+  goForward(400);
+  turnRight(400);
+  goForward(-1800);
 }
 
  void closeBlue()
  {
-   shoot(4000);
-   motorSet(LoadServ, 127);
-   delay(1000);
-   motorStopAll();
+   //shoot the ball at the 3rd flag
+   motorSet(PMotor, -127);
+   motorSet(PMotor2, -127);
+   goForward(250);
+   delay(3000);
+   loadF();
+   delay(500);
 
-   turnLeft(310);
+   goForward(-350);
 
-   goForward(-750);
 
-   turnLeft(360);
+   //turn right towards cap
+   turnLeft(270);
 
-   goForward(-1500);
+   //toggle cap and get ball
+   goForward(1000);
 
-   reset();
-   //shutdown the encoders, power will be lost and any function calls related to the encoder in the function parameters will be ignored.
-   encoderShutdown(rightEncoder);
-   encoderShutdown(leftEncoder);
+   //give enough time to load ball
+   delay(500);
+
+   motorStop(LoadServ);
+
+   goForward(-100);
+
+   turnRight(340);
+
+   loadF();
+
+   //delay(2000);
+
+   goForward(-1100);
+
  }
-
+//auton for far red square, you want fourth mark with back wheel lining up with tick closest to flag.
 void farRed()
 {
-    shoot(3000);
+    shoot(4000);
     loadF();
     delay(750);
     motorStop(PMotor);
     motorStop(PMotor2);
     //turnRight(230);
-    goForward(510);
-    turnLeft(375);
+    goForward(480);
+    turnLeft(350);
     goForward(-1850);
 }
 
@@ -278,5 +336,5 @@ void skills()
 
 void autonomous()
 {
-  closeRed();
+  closeBlue();
 }
