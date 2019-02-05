@@ -80,7 +80,7 @@ void shoot(unsigned int mili)
    	//if rotDeg less than zero then go backward until the encoder reads rotDeg
    	if(rotDeg < 0)
    	{
-   		while(encoderGet(rightEncoder) > -rotDeg && encoderGet(leftEncoder) < rotDeg)
+   		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) < -rotDeg)
    		{
    				motorSet(RightMot, -100);
    				motorSet(RightMotT, -100);
@@ -123,7 +123,7 @@ void shoot(unsigned int mili)
    	//if rotDeg less than zero then go backward until the encoder reads rotDeg
    	if(rotDeg < 0)
    	{
-   		while(encoderGet(rightEncoder) > -rotDeg && encoderGet(leftEncoder) < rotDeg)
+   		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) < -rotDeg)
    		{
    				motorSet(RightMot, -50);
    				motorSet(RightMotT, -50);
@@ -166,7 +166,7 @@ void shoot(unsigned int mili)
    	//if rotDeg less than zero then go backward until the encoder reads rotDeg
    	if(rotDeg < 0)
    	{
-   		while(encoderGet(rightEncoder) > -rotDeg && encoderGet(leftEncoder) < rotDeg)
+   		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) < -rotDeg)
    		{
    				motorSet(RightMot, -127);
    				motorSet(RightMotT, -127);
@@ -200,6 +200,39 @@ void shoot(unsigned int mili)
 
 
  //a funciton that turns right, if deg is equal zero or default then turn exactly 90 degrees.
+ void turnRightSlow(int deg)
+ {
+   	if(deg == 0)
+   			deg = 260;
+    if(deg == 6969)
+        deg = 305;
+
+    stopDrive();
+
+   	encoderReset(rightEncoder);
+   	encoderReset(leftEncoder);
+
+   	//turn left to aim at the blue flag
+   	while(encoderGet(rightEncoder) > (deg * -1))
+   	{
+   			motorSet(RightMot, -50);
+   			motorSet(RightMotT, -50);
+
+   			motorSet(LeftMot, 50);
+   			motorSet(LeftMotT, 50);
+   	}
+
+    stopDrive();
+
+    //this delay is to prevent the encoder from counting past zero after we shutoff the drive motors due to the bot still spinning.
+
+    brake(Right);
+
+   	encoderReset(rightEncoder);
+   	encoderReset(leftEncoder);
+ }
+
+ //a funciton that turns right, if deg is equal zero or default then turn exactly 90 degrees.
  void turnRight(int deg)
  {
    	if(deg == 0)
@@ -231,6 +264,40 @@ void shoot(unsigned int mili)
    	encoderReset(rightEncoder);
    	encoderReset(leftEncoder);
  }
+
+ void turnLeftSlow(int deg)
+ {
+     if(deg == 0)
+         deg = 260;
+    if(deg == 6969)
+      deg = 305;
+
+    stopDrive();
+
+     encoderReset(rightEncoder);
+     encoderReset(leftEncoder);
+
+   //turn left to aim at the blue flag
+     while(encoderGet(rightEncoder) < deg)
+     {
+         motorSet(RightMot, 50);
+         motorSet(RightMotT, 50);
+
+         motorSet(LeftMot, -50);
+         motorSet(LeftMotT, -50);
+     }
+
+    stopDrive();
+
+    //this delay is to prevent the encoder from counting past zero after we shutoff the drive motors due to the bot still spinning.
+
+    brake(Left);
+
+     encoderReset(rightEncoder);
+     encoderReset(leftEncoder);
+ }
+
+
  void turnLeft(int deg)
  {
    	if(deg == 0)
@@ -371,18 +438,60 @@ void farRed()
 //the auton code for the 1 min skills run starting in the far red square
 void skills()
 {
-  goForward(2000);
-  //shoot the ball at the 2nd flag
-  /*
+  //go forward and shoot the ball at the 2nd flag
+
   motorSet(PMotor, -127);
   motorSet(PMotor2, -127);
   goForwardSlow(250);
   delay(3000);
   loadF();
   delay(500);
-  */
+  motorStop(LoadServ);
+
+  //go back, turn left, then go for the cap
+  goForwardSlow(-320);
+  turnRightSlow(360);
+  goForwardSlow(1050);
+  loadF();
+  delay(500);
+  motorStop(LoadServ);
+
+  //go backward, turn left, go backward, then shoot.
+  goForwardSlow(-1000);
+
+  turnLeftSlow(320);
+
+  goForwardSlow(-1000);
+
+  loadF();
+  delay(1000);
+  //motorStop(LoadServ);
+
+  goForwardSlow(-200);
+
+  turnRightSlow(320);
+  goForward(-750);
+  goForwardSlow(1350);
+  delay(350);
+  motorStop(LoadServ);
+
+  //get out of cap
+  goForward(-200);
+
+  turnLeftSlow(230);
+
+  loadF();
+  delay(1000);
+  motorStop(LoadServ);
 
 
+  turnLeftSlow(360);
+
+  goForward(1250);
+
+  goForward(-300);
+
+  turnRightSlow(330);
 
 }
 
