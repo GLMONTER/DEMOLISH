@@ -435,7 +435,7 @@ void farRed()
 
  }
 
-//the auton code for the 1 min skills run starting in the far red square
+//start on back of fourth tick(farthest from flags), and as close to the center of the field.
 void skills()
 {
   //go forward and shoot the ball at the 2nd flag
@@ -457,9 +457,11 @@ void skills()
   motorStop(LoadServ);
 
   //go backward, turn left, go backward, then shoot.
-  goForwardSlow(-1000);
+  goForward(-1500);
 
-  turnLeftSlow(320);
+  goForwardSlow(200);
+
+  turnLeftSlow(330);
 
   goForwardSlow(-1000);
 
@@ -467,18 +469,18 @@ void skills()
   delay(1000);
   //motorStop(LoadServ);
 
-  goForwardSlow(-200);
+  goForwardSlow(-250);
 
   turnRightSlow(320);
   goForward(-750);
   goForwardSlow(1350);
-  delay(350);
+  delay(250);
   motorStop(LoadServ);
 
   //get out of cap
-  goForward(-200);
+  goForwardSlow(-200);
 
-  turnLeftSlow(230);
+  turnLeftSlow(235);
 
   loadF();
   delay(1000);
@@ -489,10 +491,16 @@ void skills()
 
   goForward(1250);
 
-  goForward(-300);
+  goForwardSlow(-300);
 
-  turnRightSlow(330);
+  turnRightSlow(370);
 
+
+  goForwardSlow(700);
+
+  turnLeftSlow(380);
+
+  goForwardFast(-2850);
 }
 
 void autonomous()
