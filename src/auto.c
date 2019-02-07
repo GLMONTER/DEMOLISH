@@ -1,10 +1,10 @@
 #include "main.h"
 
 //resets the left and right encoder.
-void reset()
+void resetAllENC()
 {
     encoderReset(rightEncoder);
-    encoderReset(leftEncoder);
+
 }
 
 //simply stops all main drive motors.
@@ -50,7 +50,7 @@ void brake(enum BrakeType b)
     }
     delay(50);
     stopDrive();
-    reset();
+    resetAllENC();
 }
 
 //turn on the loader for the specified amount of miliseconds then turns of the loader.
@@ -80,12 +80,11 @@ void shoot(unsigned int mili)
  {
     stopDrive();
 
-   	encoderReset(rightEncoder);
-   	encoderReset(leftEncoder);
+   	resetAllENC();
    	//if rotDeg less than zero then go backward until the encoder reads rotDeg
    	if(rotDeg < 0)
    	{
-     		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) < -rotDeg)
+     		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) >rotDeg)
      		{
      				motorSet(RightMot, -100);
      				motorSet(RightMotT, -100);
@@ -97,7 +96,7 @@ void shoot(unsigned int mili)
    	//if rotDeg is not less than zero then go forward until encoder reads rotDeg
    	else
    	{
-     		while(encoderGet(rightEncoder) < rotDeg && encoderGet(leftEncoder) > -rotDeg)
+     		while(encoderGet(rightEncoder) < rotDeg && encoderGet(leftEncoder) < rotDeg)
      		{
      				motorSet(RightMot, 100);
      				motorSet(RightMotT, 100);
@@ -113,8 +112,7 @@ void shoot(unsigned int mili)
     else
       brake(Normal);
 
-   	encoderReset(rightEncoder);
-   	encoderReset(leftEncoder);
+   	resetAllENC();
  }
 
  //same as "goDirection", but runs the motor at half the speed.
@@ -122,12 +120,12 @@ void shoot(unsigned int mili)
  {
     stopDrive();
 
-   	encoderReset(rightEncoder);
-   	encoderReset(leftEncoder);
+   	resetAllENC();
+
    	//if rotDeg less than zero then go backward until the encoder reads rotDeg
    	if(rotDeg < 0)
    	{
-     		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) < -rotDeg)
+     		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) > rotDeg)
      		{
      				motorSet(RightMot, -50);
      				motorSet(RightMotT, -50);
@@ -139,7 +137,7 @@ void shoot(unsigned int mili)
    	//if rotDeg is not less than zero then go forward until encoder reads rotDeg
    	else
    	{
-     		while(encoderGet(rightEncoder) < rotDeg && encoderGet(leftEncoder) > -rotDeg)
+     		while(encoderGet(rightEncoder) < rotDeg && encoderGet(leftEncoder) < rotDeg)
      		{
      				motorSet(RightMot, 50);
      				motorSet(RightMotT, 50);
@@ -155,8 +153,7 @@ void shoot(unsigned int mili)
     else
       brake(Normal);
 
-   	encoderReset(rightEncoder);
-   	encoderReset(leftEncoder);
+   	resetAllENC();
  }
 
  //same as "goDirection", but increases motor speed from 100 to 127.
@@ -164,12 +161,12 @@ void shoot(unsigned int mili)
  {
     stopDrive();
 
-   	encoderReset(rightEncoder);
-   	encoderReset(leftEncoder);
+   	resetAllENC();
+
    	//if rotDeg less than zero then go backward until the encoder reads rotDeg
    	if(rotDeg < 0)
    	{
-     		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) < -rotDeg)
+     		while(encoderGet(rightEncoder) > rotDeg && encoderGet(leftEncoder) > rotDeg)
      		{
      				motorSet(RightMot, -127);
      				motorSet(RightMotT, -127);
@@ -181,7 +178,7 @@ void shoot(unsigned int mili)
    	//if rotDeg is not less than zero then go forward until encoder reads rotDeg
    	else
    	{
-     		while(encoderGet(rightEncoder) < rotDeg && encoderGet(leftEncoder) > -rotDeg)
+     		while(encoderGet(rightEncoder) < rotDeg && encoderGet(leftEncoder) < rotDeg)
      		{
      				motorSet(RightMot, 127);
      				motorSet(RightMotT, 127);
@@ -197,8 +194,7 @@ void shoot(unsigned int mili)
     else
       brake(Normal);
 
-   	encoderReset(rightEncoder);
-   	encoderReset(leftEncoder);
+   	resetAllENC();
  }
 
  //turn right for the speciifed amount of ticks, defaults are in place as 260 and 305, I need to revise the defaults.
@@ -211,8 +207,7 @@ void shoot(unsigned int mili)
 
      stopDrive();
 
-     encoderReset(rightEncoder);
-     encoderReset(leftEncoder);
+     resetAllENC();
 
      //turn left to aim at the blue flag
      while(encoderGet(rightEncoder) > (deg * -1))
@@ -227,8 +222,7 @@ void shoot(unsigned int mili)
      stopDrive();
      brake(Right);
 
-     encoderReset(rightEncoder);
-     encoderReset(leftEncoder);
+     resetAllENC();
  }
 
  //same as "turnRight", but slows the motors down by 50%.
@@ -241,8 +235,7 @@ void shoot(unsigned int mili)
     if(deg == 6969)
       deg = 305;
 
-   	encoderReset(rightEncoder);
-   	encoderReset(leftEncoder);
+   	resetAllENC();
 
    	while(encoderGet(rightEncoder) > (deg * -1))
    	{
@@ -256,8 +249,7 @@ void shoot(unsigned int mili)
     stopDrive();
     brake(Right);
 
-   	encoderReset(rightEncoder);
-   	encoderReset(leftEncoder);
+   	resetAllENC();
  }
 
  void turnLeftSlow(int deg)
@@ -269,8 +261,7 @@ void shoot(unsigned int mili)
       if(deg == 6969)
          deg = 305;
 
-     encoderReset(rightEncoder);
-     encoderReset(leftEncoder);
+     resetAllENC();
 
      while(encoderGet(rightEncoder) < deg)
      {
@@ -284,8 +275,7 @@ void shoot(unsigned int mili)
      stopDrive();
      brake(Left);
 
-     encoderReset(rightEncoder);
-     encoderReset(leftEncoder);
+     resetAllENC();
  }
 
 
@@ -298,8 +288,7 @@ void shoot(unsigned int mili)
     if(deg == 6969)
        deg = 305;
 
-   	encoderReset(rightEncoder);
-   	encoderReset(leftEncoder);
+   	resetAllENC();
 
    	while(encoderGet(rightEncoder) < deg)
    	{
@@ -313,8 +302,7 @@ void shoot(unsigned int mili)
     stopDrive();
     brake(Left);
 
-   	encoderReset(rightEncoder);
-   	encoderReset(leftEncoder);
+   	resetAllENC();
  }
 
 //line up with 4th block with back tick farthest to flag.
@@ -363,8 +351,6 @@ void farBlue()
      turnLeft(60);
      load(1500);
  }
-
-
 
 //auton for far red square, you want fourth mark with back wheel lining up with tick farthest to flag.
 void farRed()
@@ -477,6 +463,7 @@ void skills()
     goDirectionFast(-2850);
 }
 
+//what actaully runs when the competition switch activates the autonmous function.
 void autonomous()
 {
     farBlue();
