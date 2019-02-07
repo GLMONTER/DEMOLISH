@@ -4,7 +4,7 @@
 void resetAllENC()
 {
     encoderReset(rightEncoder);
-
+    encoderReset(leftEncoder);
 }
 
 //simply stops all main drive motors.
