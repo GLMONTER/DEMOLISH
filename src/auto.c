@@ -467,4 +467,8 @@ void skills()
 void autonomous()
 {
     farBlue();
+
+    //disable the encoders so we can free up some processing power.
+    encoderShutdown(rightEncoder);
+    encoderShutdown(leftEncoder);
 }

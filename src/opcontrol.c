@@ -73,6 +73,7 @@ void pollToggles()
 if(buttonToggleF == true)
 {
 		motorSet(LoadServ, 127);
+		motorSet(LoadServ2, 127);
 }
 //check if other toggle is on if we need to really stop the motor
 else
@@ -80,6 +81,7 @@ else
 		if(!buttonToggleR)
 		{
 				motorStop(LoadServ);
+				motorStop(LoadServ2);
 		}
 }
 
@@ -106,7 +108,8 @@ else
 	//if backward button toggle is on, then start the motor backward
 	if(buttonToggleR == true)
 	{
-	motorSet(LoadServ, -127);
+			motorSet(LoadServ, -127);
+			motorSet(LoadServ2, -127);
 	}
 	//else, check if the forward toggle is off, then stop.
 	else
@@ -114,6 +117,7 @@ else
 			if(!buttonToggleF)
 			{
 					motorStop(LoadServ);
+					motorStop(LoadServ2);
 			}
 	}
 }
@@ -151,19 +155,19 @@ void clawControl()
 				//printf("Right %d\n", encoderGet(rightEncoder));
 				if(!rev)
 				{
-					motorSet(LeftMot, joystickGetAnalog(MAIN_JOY, 3));
-					motorSet(LeftMotT, joystickGetAnalog(MAIN_JOY, 3));
+						motorSet(LeftMot, joystickGetAnalog(MAIN_JOY, 3));
+						motorSet(LeftMotT, joystickGetAnalog(MAIN_JOY, 3));
 
-					motorSet(RightMot, joystickGetAnalog(MAIN_JOY, 2));
-					motorSet(RightMotT, joystickGetAnalog(MAIN_JOY, 2));
+						motorSet(RightMot, joystickGetAnalog(MAIN_JOY, 2));
+						motorSet(RightMotT, joystickGetAnalog(MAIN_JOY, 2));
 				}
 				else
 				{
-					motorSet(LeftMot, -joystickGetAnalog(MAIN_JOY, 2));
-					motorSet(LeftMotT, -joystickGetAnalog(MAIN_JOY, 2));
+						motorSet(LeftMot, -joystickGetAnalog(MAIN_JOY, 2));
+						motorSet(LeftMotT, -joystickGetAnalog(MAIN_JOY, 2));
 
-					motorSet(RightMot, -joystickGetAnalog(MAIN_JOY, 3));
-					motorSet(RightMotT, -joystickGetAnalog(MAIN_JOY, 3));
+						motorSet(RightMot, -joystickGetAnalog(MAIN_JOY, 3));
+						motorSet(RightMotT, -joystickGetAnalog(MAIN_JOY, 3));
 				}
 				//poll the shooter, loader, and drum toggle functions
 				pollTFly();

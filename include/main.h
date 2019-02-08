@@ -26,7 +26,7 @@
 #define MAIN_H_
 
 //motor defines for function calls
-#define LoadMot 5
+#define LoadServ2 3
 #define LoadServ 6
 
 #define LeftMot 1
