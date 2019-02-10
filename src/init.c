@@ -17,11 +17,7 @@
  * states (digitalWrite()) of limit switches, push buttons, and solenoids. It can also safely
  * configure a UART port (usartOpen()) but cannot set up an LCD (lcdInit()).
  */
-void initializeIO()
-{
-  rightEncoder = encoderInit(R_ENC_TOP, R_ENC_BOT, false);
-  leftEncoder = encoderInit(L_ENC_TOP, L_ENC_BOT, true);
-}
+void initializeIO() {}
 
 /*
  * Runs user initialization code. This function will be started in its own task with the default
@@ -39,5 +35,8 @@ void initializeIO()
 
 
 
-void initialize() {
+void initialize()
+{
+    rightEncoder = encoderInit(R_ENC_TOP, R_ENC_BOT, false);
+    leftEncoder = encoderInit(L_ENC_TOP, L_ENC_BOT, true);
 }
