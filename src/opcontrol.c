@@ -172,6 +172,8 @@ void clawControl()
 				//poll the shooter, loader, and drum toggle functions
 				pollTFly();
 				pollToggles();
+				printf("right : %d\n", encoderGet(rightEncoder));
+				printf("left : %d\n", encoderGet(leftEncoder));
 		}
 }
 

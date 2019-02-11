@@ -57,14 +57,17 @@ void brake(enum BrakeType b)
 void load(unsigned int mili)
 {
     motorSet(LoadServ, 127);
+    motorSet(LoadServ2, 127);
     delay(mili);
     motorStop(LoadServ);
+    motorStop(LoadServ2);
 }
 
 //turns on the loader.
 void loadF()
 {
     motorSet(LoadServ, 127);
+    motorSet(LoadServ2, 127);
 }
 
 //turns on the shooter and wait the specified amount of miliseconds to give the shooter time to spin up.
@@ -373,40 +376,50 @@ void farRed()
      //shoot the ball at the 3rd flag
      motorSet(PMotor, -127);
      motorSet(PMotor2, -127);
-     goDirection(250);
+     goDirectionSlow(250);
      delay(3000);
      loadF();
-     delay(500);
+     delay(1000);
 
      //go backwards
-     goDirection(-400);
+     goDirectionSlow(-400);
 
      //turn right towards cap
-     turnRight(340);
+     turnRightSlow(300);
 
      //get ball from cap
-     goDirection(1000);
+     goDirectionSlow(1000);
 
      //give enough time to load ball
-     delay(500);
+     delay(700);
+
+     motorStop(LoadServ);
+     motorStop(LoadServ2);
+
+     turnLeftSlow(210);
+
+     goDirection(300);
+
+     load(1500);
+
+     goDirection(-300);
+
+     turnRight(170);
 
      //get back enough to allign with the alliance platform.
-     goDirection(-100);
+     goDirectionSlow(-200);
 
-     //stop the loader to prevent shooting the enemy alliance in the face.
-     motorStop(LoadServ);
-
-     //turb left to get ready to climb alliance platform.
-     turnLeft(6969);
+     //turb Right to get ready to climb alliance platform.
+     turnRightSlow(340);
 
      //actaully climb.
-     goDirection(-1300);
+     goDirection(800);
 
      //turn right to shoot the middle top flag.
-     turnRight(75);
+    // turnRightSlow(75);
 
      //turn  on the loader
-     load(1500);
+    // load(1500);
  }
 
 //start on back of fourth tick(farthest from flags), and as close to the center of the field.
@@ -466,7 +479,7 @@ void skills()
 //what actaully runs when the competition switch activates the autonmous function.
 void autonomous()
 {
-    farBlue();
+    closeRed();
 
     //disable the encoders so we can free up some processing power.
     encoderShutdown(rightEncoder);

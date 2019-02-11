@@ -37,6 +37,6 @@ void initializeIO() {}
 
 void initialize()
 {
-    rightEncoder = encoderInit(R_ENC_TOP, R_ENC_BOT, false);
-    leftEncoder = encoderInit(L_ENC_TOP, L_ENC_BOT, true);
+    rightEncoder = encoderInit(R_ENC_TOP, R_ENC_BOT, true);
+    leftEncoder = encoderInit(L_ENC_TOP, L_ENC_BOT, false);
 }
