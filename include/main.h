@@ -29,6 +29,8 @@
 #define LoadServ2 3
 #define LoadServ 6
 
+#define hitter 5
+
 #define LeftMot 1
 #define LeftMotT 2
 
