@@ -26,7 +26,7 @@ void raceControl();
 
 void pollTFly()
 {
-		if(joystickGetDigital(MAIN_JOY, 6, JOY_UP))
+		if(joystickGetDigital(MAIN_JOY, 5, JOY_UP))
 		{
 				if(!flyPressed)
 				{
@@ -55,7 +55,7 @@ void pollTFly()
 void pollToggles()
 {
 		//go forward with drum
-		if(joystickGetDigital(MAIN_JOY, 7, JOY_DOWN))
+		if(joystickGetDigital(MAIN_JOY, 5, JOY_DOWN))
 		{
 				//if the forward button toggle isn't on then continute
 				if(!buttonPressed7R)
@@ -79,7 +79,7 @@ void pollToggles()
 	else
 		isLocked = false;
 		//go forward with drum
-		if(joystickGetDigital(MAIN_JOY, 5, JOY_UP))
+		if(joystickGetDigital(MAIN_JOY, 7, JOY_UP))
 		{
 				//if the forward button toggle isn't on then continute
 				if(!buttonPressedF)
@@ -117,7 +117,7 @@ else
 }
 
 	//go backwards with drum
-	if(joystickGetDigital(MAIN_JOY, 5, JOY_DOWN))
+	if(joystickGetDigital(MAIN_JOY, 7, JOY_DOWN))
 	{
 			//if we haven't pressed the button then toggle the button
 			if(!buttonPressedR)
@@ -129,7 +129,6 @@ else
 
 					//so we stop going forward.
 					buttonToggleF = false;
-
 			}
 	}
 	//else, then turn button pressed to false
@@ -163,7 +162,6 @@ void clawControl()
 {
 		while(true)
 		{
-
 			if(joystickGetDigital(MAIN_JOY, 8, JOY_DOWN))
 			{
 					motorSet(hitter, 127);

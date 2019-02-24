@@ -479,7 +479,7 @@ void skills()
 //what actaully runs when the competition switch activates the autonmous function.
 void autonomous()
 {
-    closeRed();
+    closeBlue();
 
     //disable the encoders so we can free up some processing power.
     encoderShutdown(rightEncoder);

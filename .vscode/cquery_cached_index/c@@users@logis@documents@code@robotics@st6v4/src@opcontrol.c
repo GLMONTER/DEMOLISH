@@ -12,6 +12,9 @@ int buttonPressedF = 0;
 int buttonToggleR = 0;
 int buttonPressedR = 0;
 
+int buttonToggle7R = 0;
+int buttonPressed7R = 0;
+bool isLocked = false;
 
 int flyToggle = 0;
 int flyPressed = 0;
@@ -23,7 +26,7 @@ void raceControl();
 
 void pollTFly()
 {
-		if(joystickGetDigital(MAIN_JOY, 6, JOY_UP))
+		if(joystickGetDigital(MAIN_JOY, 5, JOY_UP))
 		{
 				if(!flyPressed)
 				{
@@ -52,7 +55,31 @@ void pollTFly()
 void pollToggles()
 {
 		//go forward with drum
-		if(joystickGetDigital(MAIN_JOY, 5, JOY_UP))
+		if(joystickGetDigital(MAIN_JOY, 5, JOY_DOWN))
+		{
+				//if the forward button toggle isn't on then continute
+				if(!buttonPressed7R)
+				{
+						//actaully flip the toggle, this is why the type has to be int
+						buttonToggle7R = 1 - buttonToggle7R;
+						//changed button pressed to true
+						buttonPressed7R = 1;
+				}
+		}
+		//switch back to normal buttton state but leave toggle on if button isn't pressed.
+		else
+			buttonPressed7R = 0;
+
+	//if our forward toggle is on, then eat the balls :D
+	if(buttonToggle7R == true)
+	{
+		motorStop(LoadServ2);
+		isLocked = true;
+	}
+	else
+		isLocked = false;
+		//go forward with drum
+		if(joystickGetDigital(MAIN_JOY, 7, JOY_UP))
 		{
 				//if the forward button toggle isn't on then continute
 				if(!buttonPressedF)
@@ -70,21 +97,27 @@ void pollToggles()
 			buttonPressedF = 0;
 
 //if our forward toggle is on, then eat the balls :D
-if(buttonToggleF == true)
+if(buttonToggleF == true && !isLocked)
+{
+		motorSet(LoadServ, 127);
+		motorSet(LoadServ2, 127);
+}
+if(buttonToggleF == true && isLocked)
 {
 		motorSet(LoadServ, 127);
 }
 //check if other toggle is on if we need to really stop the motor
 else
 {
-		if(!buttonToggleR)
+		if(!buttonToggleR && !buttonToggleF)
 		{
 				motorStop(LoadServ);
+				motorStop(LoadServ2);
 		}
 }
 
 	//go backwards with drum
-	if(joystickGetDigital(MAIN_JOY, 5, JOY_DOWN))
+	if(joystickGetDigital(MAIN_JOY, 7, JOY_DOWN))
 	{
 			//if we haven't pressed the button then toggle the button
 			if(!buttonPressedR)
@@ -96,7 +129,6 @@ else
 
 					//so we stop going forward.
 					buttonToggleF = false;
-
 			}
 	}
 	//else, then turn button pressed to false
@@ -104,16 +136,22 @@ else
 		buttonPressedR = 0;
 
 	//if backward button toggle is on, then start the motor backward
-	if(buttonToggleR == true)
+	if(buttonToggleR == true && !isLocked)
 	{
-	motorSet(LoadServ, -127);
+			motorSet(LoadServ, -127);
+			motorSet(LoadServ2, -127);
+	}
+	if(buttonToggleR == true && isLocked)
+	{
+			motorSet(LoadServ, -127);
 	}
 	//else, check if the forward toggle is off, then stop.
 	else
 	{
-			if(!buttonToggleF)
+			if(!buttonToggleF && !buttonToggleR)
 			{
 					motorStop(LoadServ);
+					motorStop(LoadServ2);
 			}
 	}
 }
@@ -124,6 +162,18 @@ void clawControl()
 {
 		while(true)
 		{
+			if(joystickGetDigital(MAIN_JOY, 8, JOY_DOWN))
+			{
+					motorSet(hitter, 127);
+			}
+			if(joystickGetDigital(MAIN_JOY, 8, JOY_UP))
+			{
+					motorSet(hitter, -127);
+			}
+			if(!joystickGetDigital(MAIN_JOY, 8, JOY_DOWN) && !joystickGetDigital(MAIN_JOY, 8, JOY_UP))
+			{
+					motorSet(hitter, 0);
+			}
 			if(joystickGetDigital(MAIN_JOY, 6, JOY_DOWN))
 			{
 					if(!reversePressed)
@@ -142,34 +192,32 @@ void clawControl()
 			}
 			else
 			{
-				if(!reverseToggle)
-				{
-						rev = false;
-				}
+					if(!reverseToggle)
+					{
+							rev = false;
+					}
 			}
 
 				//printf("Right %d\n", encoderGet(rightEncoder));
 				if(!rev)
 				{
-					motorSet(LeftMot, joystickGetAnalog(MAIN_JOY, 3));
-					motorSet(LeftMotT, joystickGetAnalog(MAIN_JOY, 3));
+						motorSet(LeftMot, joystickGetAnalog(MAIN_JOY, 3));
+						motorSet(LeftMotT, joystickGetAnalog(MAIN_JOY, 3));
 
-					motorSet(RightMot, joystickGetAnalog(MAIN_JOY, 2));
-					motorSet(RightMotT, joystickGetAnalog(MAIN_JOY, 2));
+						motorSet(RightMot, joystickGetAnalog(MAIN_JOY, 2));
+						motorSet(RightMotT, joystickGetAnalog(MAIN_JOY, 2));
 				}
 				else
 				{
-					motorSet(LeftMot, -joystickGetAnalog(MAIN_JOY, 2));
-					motorSet(LeftMotT, -joystickGetAnalog(MAIN_JOY, 2));
+						motorSet(LeftMot, -joystickGetAnalog(MAIN_JOY, 2));
+						motorSet(LeftMotT, -joystickGetAnalog(MAIN_JOY, 2));
 
-					motorSet(RightMot, -joystickGetAnalog(MAIN_JOY, 3));
-					motorSet(RightMotT, -joystickGetAnalog(MAIN_JOY, 3));
+						motorSet(RightMot, -joystickGetAnalog(MAIN_JOY, 3));
+						motorSet(RightMotT, -joystickGetAnalog(MAIN_JOY, 3));
 				}
 				//poll the shooter, loader, and drum toggle functions
 				pollTFly();
 				pollToggles();
-				printf("right : %d\n", encoderGet(rightEncoder));
-				printf("left : %d\n", encoderGet(leftEncoder));
 		}
 }
 
